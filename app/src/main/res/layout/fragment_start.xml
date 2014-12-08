@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.detroitlabs.cartograffi.fragments.StartFragment">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/start_screen_image"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/map"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cartograffi"
+        android:id="@+id/start_title_textview"
+        android:layout_below="@+id/start_screen_image"
+        android:layout_centerHorizontal="true"
+        android:textSize="40sp"/>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="@string/create"
+        android:id="@+id/start_create_button"
+        android:layout_gravity="center_vertical"
+        android:layout_alignTop="@+id/start_view_saved_button"
+        android:layout_alignLeft="@+id/start_screen_image"
+        android:layout_alignStart="@+id/start_screen_image"
+        android:singleLine="false"/>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="@string/view_saved"
+        android:id="@+id/start_view_saved_button"
+        android:layout_gravity="center_vertical"
+        android:layout_below="@+id/start_title_textview"
+        android:layout_alignRight="@+id/start_screen_image"
+        android:layout_alignEnd="@+id/start_screen_image"
+        android:layout_marginTop="53dp"/>
+
+</RelativeLayout>

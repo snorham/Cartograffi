@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.detroitlabs.cartograffi.activities.CreateActivity" >
+
+    <item android:id ="@+id/action_hide"
+          android:title="@string/action_hide"
+          android:icon="@drawable/eye"
+          android:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_save"
+        android:title="@string/action_save"
+        android:icon="@drawable/floppy"
+        android:showAsAction="ifRoom">
+    <menu>
+        <item
+            android:id="@+id/action_save_snapshot"
+            android:title="@string/action_save_snapshot" />
+        <item
+            android:id="@+id/action_view_snapshots"
+            android:title="@string/action_view_snapshots" />
+    </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- SHARED STRINGS -->
+    <string name="app_name">Cartograffi</string>
+    <string name="action_share">Share</string>
+
+    <!-- KILL ME -->
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- START SCREEN -->
+    <string name="title_activity_start">Cartograffi</string>
+    <string name="cartograffi">CARTOGRAFFI</string>
+    <string name="create">CREATE</string>
+    <string name="view_saved">VIEW SAVED</string>
+    <string name="title_activity_view_saved">ViewSavedActivity</string>
+
+    <!-- CREATE SCREEN -->
+    <string name="title_activity_create">Cartograffi</string>
+    <string name="action_create">Create</string>
+    <string name="action_hide">Show/Hide</string>
+    <string name="color_button_on">SELECTED</string>
+    <string name="color_button_off"></string>
+    <string name="draw_button_on">STOP DRAWING</string>
+    <string name="draw_button_off">START DRAWING</string>
+    <string name="action_save_snapshot">Save Snapshot</string>
+    <string name="action_view_snapshots">View Snapshots</string>
+
+    <!-- SAVE SCREEN -->
+    <string name="title_activity_save">Save Snapshot</string>
+    <string name="action_save">Save/View Snapshot</string>
+    <string name="save_save_button">SAVE</string>
+    <string name="save_filename_editText">Enter Filename\.\.\.</string>
+    <string name="save_filename_textView">Filename:</string>
+
+</resources>
