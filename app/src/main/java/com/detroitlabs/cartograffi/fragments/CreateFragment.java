@@ -82,6 +82,9 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        GoogleMap.SnapshotReadyCallback snapshotReadyCallback;
+
         switch (item.getItemId()) {
             case R.id.action_hide:
                 if (hidden) {
@@ -95,10 +98,13 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
                 return true;
             case R.id.action_save_snapshot:
-                turnOffMapUI();
-                locationManager.removeUpdates(this);
-                googleMap.getUiSettings().setAllGesturesEnabled(false);
-                captureMapImage();
+                snapshotReadyCallback = new GoogleMap.SnapshotReadyCallback() {
+                    @Override
+                    public void onSnapshotReady(Bitmap bitmap) {
+                        goToSaveScreen(bitmap);
+                    }
+                };
+                captureMapImage(snapshotReadyCallback);
                 return true;
 
             case R.id.action_view_snapshots:
@@ -108,10 +114,13 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
             case R.id.action_share:
                 SaveFragment.directory.mkdirs();
-                turnOnMapUI();
-                locationManager.removeUpdates(this);
-                googleMap.getUiSettings().setAllGesturesEnabled(false);
-                captureMapImageForSharing();
+                snapshotReadyCallback = new GoogleMap.SnapshotReadyCallback() {
+                    @Override
+                    public void onSnapshotReady(Bitmap bitmap) {
+                        shareBitmap(bitmap);
+                    }
+                };
+                captureMapImage(snapshotReadyCallback);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -203,8 +212,11 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         //PERHAPS CHANGE THIS, MAKES IT HARD TO LOOK AT THE DRAWING
 
         LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        CameraUpdate center = CameraUpdateFactory.newLatLng(userLatLng);
-        googleMap.moveCamera(center);
+
+        if (!hidden) {
+            CameraUpdate center = CameraUpdateFactory.newLatLng(userLatLng);
+            googleMap.moveCamera(center);
+        }
 
         if (drawOn) {
             List<LatLng> polylineLatLngs = polyline.getPoints();
@@ -257,14 +269,16 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
         locationProvider = locationManager.getBestProvider(criteria, false);
 
+        //moved from here
+        locationManager.requestLocationUpdates(locationProvider, minTime, minDistance, this);
+
+        //moved to here
         Location userLocation = locationManager.getLastKnownLocation(locationProvider);
 
         //initialize the userLocation
         if (userLocation != null) {
             onLocationChanged(userLocation);
         }
-
-        locationManager.requestLocationUpdates(locationProvider, minTime, minDistance, this);
     }
 
     public void setColors() {
@@ -294,32 +308,14 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         polyline = googleMap.addPolyline(rectOptions);
     }
 
-    public void captureMapImage() {
+    public void captureMapImage(final GoogleMap.SnapshotReadyCallback snapshotReadyCallback) {
+        turnOffMapUI();
+        locationManager.removeUpdates(this);
+        googleMap.getUiSettings().setAllGesturesEnabled(false);
 
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
-                GoogleMap.SnapshotReadyCallback snapshotReadyCallback = new GoogleMap.SnapshotReadyCallback() {
-                    @Override
-                    public void onSnapshotReady(Bitmap bitmap) {
-                        goToSaveScreen(bitmap);
-                    }
-                };
-                googleMap.snapshot(snapshotReadyCallback);
-            }
-        });
-    }
-
-    public void captureMapImageForSharing() {
-        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                GoogleMap.SnapshotReadyCallback snapshotReadyCallback = new GoogleMap.SnapshotReadyCallback() {
-                    @Override
-                    public void onSnapshotReady(Bitmap bitmap) {
-                        shareBitmap(bitmap);
-                    }
-                };
                 googleMap.snapshot(snapshotReadyCallback);
             }
         });
@@ -340,13 +336,15 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         //is says that it's mounted when it isnt...
         if (Environment.MEDIA_MOUNTED.equals(state)) {
 
-            File mapImageFile = new File(SaveFragment.directory, sharedFilename);
+            if (sharedFile.exists()){
+                sharedFile.delete();
+            }
 
             try {
-                FileOutputStream fos = new FileOutputStream(mapImageFile);
+                FileOutputStream fos = new FileOutputStream(sharedFile);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                 fos.close();
-                CartograffiUtils.shareImageFile(getActivity(),mapImageFile);
+                CartograffiUtils.shareImageFile(getActivity(),sharedFile);
             } catch (FileNotFoundException e) {
                 Toast.makeText(getActivity(), "File for sharing not found", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {

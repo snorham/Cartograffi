@@ -1,6 +1,7 @@
 package com.detroitlabs.cartograffi.fragments;
 
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -43,6 +44,9 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_view_saved, container, false);
+
+        ActionBar ab = getActivity().getActionBar();
+        ab.setTitle(getResources().getString(R.string.title_activity_view_saved));
 
         snapshotListAdapter = new SnapshotListAdapter(getActivity(),getSavedSnapshotFiles());
 
