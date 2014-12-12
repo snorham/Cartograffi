@@ -2,17 +2,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/Tan"
     tools:context="com.detroitlabs.cartograffi.fragments.StartFragment">
 
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:id="@+id/start_screen_image"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:focusableInTouchMode="false"
-        android:src="@drawable/map"/>
+        android:background="@drawable/map"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="28dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,28 +26,64 @@
         android:id="@+id/start_title_textview"
         android:layout_below="@+id/start_screen_image"
         android:layout_centerHorizontal="true"
-        android:textSize="40sp"/>
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:textIsSelectable="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"/>
 
     <Button
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:text="@string/create"
         android:id="@+id/start_create_button"
         android:layout_gravity="center_vertical"
         android:layout_alignTop="@+id/start_view_saved_button"
         android:layout_alignLeft="@+id/start_screen_image"
         android:layout_alignStart="@+id/start_screen_image"
-        android:singleLine="false"/>
+        android:singleLine="false"
+        android:background="@drawable/pen"/>
 
     <Button
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:text="@string/view_saved"
         android:id="@+id/start_view_saved_button"
         android:layout_gravity="center_vertical"
+        android:background="@drawable/floppy"
         android:layout_below="@+id/start_title_textview"
         android:layout_alignRight="@+id/start_screen_image"
-        android:layout_alignEnd="@+id/start_screen_image"
-        android:layout_marginTop="53dp"/>
+        android:layout_alignEnd="@+id/start_screen_image"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_create"
+        android:id="@+id/start_create_textView"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_below="@+id/start_create_button"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal|top"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/start_create_button"
+        android:layout_alignEnd="@+id/start_create_button"
+        android:layout_alignLeft="@+id/start_title_textview"
+        android:layout_alignStart="@+id/start_title_textview"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_view_saved"
+        android:id="@+id/textView"
+        android:layout_below="@+id/start_view_saved_button"
+        android:layout_alignLeft="@+id/start_view_saved_button"
+        android:layout_alignStart="@+id/start_view_saved_button"
+        android:gravity="center_horizontal|top"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/start_view_saved_button"
+        android:layout_alignEnd="@+id/start_view_saved_button"/>
 
 </RelativeLayout>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:background="@color/Tan"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:descendantFocusability="blocksDescendants">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/view_row_thumbnail"
+        android:layout_margin="16dp"
+        android:focusable="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_saved_filename"
+            android:id="@+id/view_row_filename_header"
+            android:singleLine="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_toEndOf="@+id/view_row_thumbnail"
+            android:layout_alignTop="@+id/view_row_thumbnail"
+            android:layout_toRightOf="@+id/view_row_thumbnail"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/view_row_filename_textview"
+            android:textSize="20sp"
+            android:layout_toEndOf="@+id/view_row_thumbnail"
+            android:layout_toStartOf="@+id/view_row_share_button"
+            android:layout_below="@+id/view_row_filename_header"
+            android:layout_toRightOf="@+id/view_row_thumbnail"
+            android:layout_toLeftOf="@+id/view_row_share_button"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_saved_date_modified"
+            android:id="@+id/view_row_modified_header"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_toEndOf="@+id/view_row_thumbnail"
+            android:layout_below="@+id/view_row_filename_textview"
+            android:layout_toRightOf="@+id/view_row_thumbnail"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/view_row_modified_textview"
+            android:textSize="20sp"
+            android:layout_toEndOf="@+id/view_row_thumbnail"
+            android:layout_below="@+id/view_row_modified_header"
+            android:layout_toRightOf="@+id/view_row_thumbnail"
+            android:layout_alignRight="@+id/view_row_share_button"
+            android:layout_alignEnd="@+id/view_row_share_button"/>
+
+
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/view_row_share_button"
+        android:longClickable="false"
+        android:background="@drawable/share"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"/>
+</RelativeLayout>

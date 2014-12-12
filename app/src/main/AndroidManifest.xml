@@ -45,6 +45,7 @@
             android:name=".activities.CreateActivity"
             android:label="@string/title_activity_create"
             android:parentActivityName=".activities.StartActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -53,11 +54,11 @@
         <activity
             android:name=".activities.ViewSavedActivity"
             android:label="@string/title_activity_view_saved"
-            android:parentActivityName=".activities.StartActivity"
+            android:parentActivityName=".activities.CreateActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.detroitlabs.cartograffi.activities.StartActivity" />
+                android:value="com.detroitlabs.cartograffi.activities.CreateActivity" />
         </activity>
         <activity
             android:name=".activities.SaveActivity"

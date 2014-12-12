@@ -26,6 +26,9 @@ import java.io.IOException;
 public class SaveFragment extends Fragment implements View.OnClickListener {
     private Bitmap mapImage;
     private EditText filenameEditText;
+    public static final File directory =
+            new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Cartograffi");
+
 
     //FOR LATER
     public static SaveFragment newInstance(Bitmap mapImage) {
@@ -38,6 +41,12 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
     public SaveFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        directory.mkdirs();
     }
 
     @Override
@@ -73,7 +82,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
         String userEntry = filenameEditText.getText().toString().trim();
         Boolean validEntry = true;
-        if (userEntry.length() < 1){
+        if (userEntry.length() < 1) {
             Toast.makeText(getActivity(), "You must first enter a filename", Toast.LENGTH_SHORT).show();
         } else if (userEntry.length() > 20) {
             Toast.makeText(getActivity(), "Filename must be 20 characters or under", Toast.LENGTH_SHORT).show();
@@ -88,7 +97,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         }
 
         if (validEntry) {
-            saveFile(userEntry);
+            saveFile(userEntry + ".jpg");
         }
 
     }
@@ -98,20 +107,27 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         String state = Environment.getExternalStorageState();
         //is says that it's mounted when it isnt...
         if (Environment.MEDIA_MOUNTED.equals(state)) {
-            File mapImageFile = new File (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), filename);
-            try {
-                FileOutputStream fos = new FileOutputStream(mapImageFile);
-                mapImage.compress(Bitmap.CompressFormat.PNG, 90, fos);
-                fos.close();
-                Toast.makeText(getActivity(), "File saved", Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-            } catch (FileNotFoundException e) {
-                Toast.makeText(getActivity(), "File not found", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                Toast.makeText(getActivity(), "Error accessing file", Toast.LENGTH_SHORT).show();
+
+            File mapImageFile = new File(directory, filename);
+
+            if (mapImageFile.exists()) {
+                Toast.makeText(getActivity(), "Filename already in use.  Rename file.", Toast.LENGTH_SHORT).show();
+            } else {
+
+                try {
+                    FileOutputStream fos = new FileOutputStream(mapImageFile);
+                    mapImage.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                    fos.close();
+                    Toast.makeText(getActivity(), "File saved", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(getActivity(), "File not found", Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    Toast.makeText(getActivity(), "Error accessing file", Toast.LENGTH_SHORT).show();
+                }
             }
         } else {
-            Toast.makeText(getActivity(), "External Storage not found",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "External Storage not found", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -7,6 +7,11 @@
           android:icon="@drawable/eye"
           android:showAsAction="ifRoom"/>
 
+    <item android:id ="@+id/action_share"
+          android:title="@string/action_share"
+          android:icon="@drawable/share"
+          android:showAsAction="ifRoom"/>
+
     <item android:id="@+id/action_save"
         android:title="@string/action_save"
         android:icon="@drawable/floppy"

@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import com.detroitlabs.cartograffi.R;
@@ -18,7 +19,11 @@ public class SaveActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_with_single_fragment);
         Intent intent = getIntent();
-        Bitmap mapImage = intent.getParcelableExtra(CreateFragment.MAP_IMAGE_KEY);
+
+        byte[] byteArrayExtra = getIntent().getByteArrayExtra(CreateFragment.MAP_IMAGE_KEY);
+        Bitmap mapImage = BitmapFactory.decodeByteArray(
+                byteArrayExtra, 0, byteArrayExtra.length);
+
 
         FragmentManager fragMan = getFragmentManager();
         Fragment saveFrag = fragMan.findFragmentById(R.id.container_frame);
