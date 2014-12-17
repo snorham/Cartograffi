@@ -107,6 +107,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     @Override
     public void onResume() {
         super.onResume();
+        mapView.onResume();
 
         Log.d(CreateFragment.class.getName(), "OnResume");
 
@@ -131,11 +132,30 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     @Override
     public void onPause() {
         super.onPause();
+        mapView.onPause();
         if(savedInstanceState == null){
             savedInstanceState = new Bundle();
         }
 
         savedInstanceState.putFloat(CAMERA_POSITION_KEY,googleMap.getCameraPosition().zoom);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
     @Override
