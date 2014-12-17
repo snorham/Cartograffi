@@ -109,39 +109,31 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     public void onResume() {
         super.onResume();
         mapView.onResume();
-        mapView.getMapAsync(this);
-
-        Log.d(CreateFragment.class.getName(), "OnResume");
-
-        if (menu != null){
-            menu.setGroupEnabled(0, true);
-        }
-
-        if (savedInstanceState != null){
-
-            polylines = (ArrayList<Polyline>)savedInstanceState.getSerializable(POLYLINES_KEY);
-
-            for (Polyline line: polylines){
-                PolylineOptions polylineOptions = new PolylineOptions();
-
-                for (LatLng point: line.getPoints()){
-                    polylineOptions.add(point);
-                }
-
-                polylineOptions.color(line.getColor());
-                googleMap.addPolyline(polylineOptions);
-            }
-
-            defaultZoom = savedInstanceState.getFloat(CAMERA_POSITION_KEY, defaultZoom);
-        } else {
-            defaultZoom = 15;
-        }
 
         ActionBar ab = getActivity().getActionBar();
         if (ab != null){
             ab.setTitle(getResources().getString(R.string.title_activity_create));
             ab.setDisplayHomeAsUpEnabled(false);
             ab.setHomeButtonEnabled(false);
+        }
+
+        if (savedInstanceState != null){
+
+            polylines = (ArrayList<Polyline>)savedInstanceState.getSerializable(POLYLINES_KEY);
+            Log.d(CreateFragment.class.getName(),"GETTING "+ polylines.size() + " POLYLINES");
+
+            defaultZoom = savedInstanceState.getFloat(CAMERA_POSITION_KEY, defaultZoom);
+            Log.d(CreateFragment.class.getName(),"GETTING DEFAULT ZOOM: "+ defaultZoom);
+        } else {
+            defaultZoom = 15;
+        }
+
+        mapView.getMapAsync(this);
+
+        Log.d(CreateFragment.class.getName(), "OnResume");
+
+        if (menu != null){
+            menu.setGroupEnabled(0, true);
         }
     }
 
@@ -156,6 +148,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
         if(googleMap != null) savedInstanceState.putFloat(CAMERA_POSITION_KEY,googleMap.getCameraPosition().zoom);
         savedInstanceState.putSerializable(POLYLINES_KEY, polylines);
+        Log.d(CreateFragment.class.getName(), "SAVING " + polylines.size() + " POLYLINES");
     }
 
     @Override
@@ -236,6 +229,16 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         Log.d(CreateFragment.class.getName(),"onMapReady");
         this.googleMap = googleMap;
         setUpGoogleMap();
+        for (Polyline line: polylines){
+            PolylineOptions polylineOptions = new PolylineOptions();
+
+            for (LatLng point: line.getPoints()){
+                polylineOptions.add(point);
+            }
+
+            polylineOptions.color(line.getColor());
+            googleMap.addPolyline(polylineOptions);
+        }
     }
 
     private void initializeLocationManager() {
