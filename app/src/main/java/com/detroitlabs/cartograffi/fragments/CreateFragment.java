@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +40,7 @@ import java.util.List;
 public class CreateFragment extends Fragment implements View.OnClickListener, LocationListener, ColorClickListener, OnMapReadyCallback {
     public final static String MAP_IMAGE_KEY = "MAP_IMAGE_KEY";
     public final static String CAMERA_POSITION_KEY = "cameraPosition";
+    public static final String POLYLINES_KEY = "polylines";
     private float defaultZoom;
     private GoogleMap googleMap;
     private LocationManager locationManager;
@@ -51,7 +53,8 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     private ToggleButton drawToggle;
     private Bundle savedInstanceState;
     private Menu menu;
-    MapView mapView;
+    private MapView mapView;
+    private ArrayList<Polyline> polylines = new ArrayList<Polyline>();
 
     public CreateFragment() {
     }
@@ -82,8 +85,6 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
             e.printStackTrace();
         }
 
-        mapView.getMapAsync(this);
-
         Log.d(CreateFragment.class.getName(), "OnCreateView");
         currentColor = getResources().getColor(R.color.Black);
         setColors();
@@ -108,6 +109,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     public void onResume() {
         super.onResume();
         mapView.onResume();
+        mapView.getMapAsync(this);
 
         Log.d(CreateFragment.class.getName(), "OnResume");
 
@@ -116,6 +118,20 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         }
 
         if (savedInstanceState != null){
+
+            polylines = (ArrayList<Polyline>)savedInstanceState.getSerializable(POLYLINES_KEY);
+
+            for (Polyline line: polylines){
+                PolylineOptions polylineOptions = new PolylineOptions();
+
+                for (LatLng point: line.getPoints()){
+                    polylineOptions.add(point);
+                }
+
+                polylineOptions.color(line.getColor());
+                googleMap.addPolyline(polylineOptions);
+            }
+
             defaultZoom = savedInstanceState.getFloat(CAMERA_POSITION_KEY, defaultZoom);
         } else {
             defaultZoom = 15;
@@ -133,11 +149,13 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     public void onPause() {
         super.onPause();
         mapView.onPause();
+
         if(savedInstanceState == null){
             savedInstanceState = new Bundle();
         }
 
-        savedInstanceState.putFloat(CAMERA_POSITION_KEY,googleMap.getCameraPosition().zoom);
+        if(googleMap != null) savedInstanceState.putFloat(CAMERA_POSITION_KEY,googleMap.getCameraPosition().zoom);
+        savedInstanceState.putSerializable(POLYLINES_KEY, polylines);
     }
 
     @Override
@@ -220,20 +238,6 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         setUpGoogleMap();
     }
 
-//    private void setUpMapFragment() {
-//
-//        if (mapView == null) {
-//            Log.d(CreateFragment.class.getName(),"setUpMapFragment mapFragment == null");
-//            mapFragment = MapFragment.newInstance();
-//            mapFragment.setRetainInstance(true);
-//            getChildFragmentManager().beginTransaction().add(R.id.create_map_container, mapFragment).commit();
-//            mapFragment.getMapAsync(this);
-//        } else {
-//            Log.d(CreateFragment.class.getName(),"setUpMapFragment mapFragment != null");
-//            mapFragment.getMapAsync(this);
-//        }
-//    }
-
     private void initializeLocationManager() {
         final int minTime = 1000; //time between userLocation updates in milliseconds
         final int minDistance = 1; //distance required to move to update userLocation in meters;
@@ -277,8 +281,10 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
                 .color(color)
                 .add(userLatLng);
 
-        // Get back the mutable Polyline
+        // Get back the mutable Polyline and add to arraylist
         polyline = googleMap.addPolyline(rectOptions);
+        polylines.add(polyline);
+
     }
 
     public void captureMapImage(final GoogleMap.SnapshotReadyCallback snapshotReadyCallback) {
