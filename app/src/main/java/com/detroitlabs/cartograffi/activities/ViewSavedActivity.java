@@ -35,5 +35,15 @@ public class ViewSavedActivity extends Activity {
         menu.findItem(R.id.action_share).setEnabled(false).setVisible(false);
         return true;
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }
 

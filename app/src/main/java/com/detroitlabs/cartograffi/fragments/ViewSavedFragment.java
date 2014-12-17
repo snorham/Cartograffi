@@ -9,10 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.detroitlabs.cartograffi.R;
+import com.detroitlabs.cartograffi.activities.CreateActivity;
 import com.detroitlabs.cartograffi.adapters.SnapshotListAdapter;
+import com.detroitlabs.cartograffi.interfaces.SnapshopListItemShareListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,8 +27,10 @@ import java.util.Collections;
  * A simple {@link Fragment} subclass.
  *
  */
-public class ViewSavedFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class ViewSavedFragment extends Fragment implements AdapterView.OnItemClickListener,SnapshopListItemShareListener {
     private SnapshotListAdapter snapshotListAdapter;
+    private ListView snapshotListView;
+    private ArrayList<ImageButton> shareButtons;
 
     public ViewSavedFragment() {
         // Required empty public constructor
@@ -33,7 +39,7 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        File sharedFile = CreateFragment.sharedFile;
+        File sharedFile = CreateActivity.sharedFile;
         if(sharedFile.exists()){
             sharedFile.delete();
         }
@@ -46,29 +52,53 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
         View root = inflater.inflate(R.layout.fragment_view_saved, container, false);
 
         ActionBar ab = getActivity().getActionBar();
-        ab.setTitle(getResources().getString(R.string.title_activity_view_saved));
+        if (ab != null){
+            ab.setTitle(getResources().getString(R.string.title_activity_view_saved));
+        }
 
-        snapshotListAdapter = new SnapshotListAdapter(getActivity(),getSavedSnapshotFiles());
+        ArrayList<File> files = getSavedSnapshotFiles();
 
-        ListView snapshotListView = (ListView) root.findViewById(R.id.view_saved_listview);
-        snapshotListView.setAdapter(snapshotListAdapter);
-        snapshotListView.setOnItemClickListener(this);
+        if (files == null || files.size()< 1){
+            Toast.makeText(getActivity(),"No saved files",Toast.LENGTH_SHORT).show();
 
+        } else {
+            snapshotListAdapter = new SnapshotListAdapter(this,getActivity(),files);
+
+            snapshotListView = (ListView) root.findViewById(R.id.view_saved_listview);
+            snapshotListView.setAdapter(snapshotListAdapter);
+            snapshotListView.setOnItemClickListener(this);
+        }
         return root;
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (shareButtons != null){
+            for(ImageButton shareButton: shareButtons){
+                shareButton.setEnabled(true);
+            }
+        }
+        if (snapshotListView != null){
+            snapshotListView.setEnabled(true);
+        }
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        snapshotListView.setEnabled(false);
         File chosenFile = snapshotListAdapter.getItem(position);
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container_frame,ViewSavedDetailFragment.newInstance(chosenFile));
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 
-        if (fragmentTransaction.isEmpty()) {
-            fragmentTransaction.replace(R.id.container_frame,ViewSavedDetailFragment.newInstance(chosenFile));
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }
-
+    @Override
+    public void OnShare(ArrayList<ImageButton> disabledShareButtons) {
+        shareButtons = disabledShareButtons;
+        snapshotListView.setEnabled(false);
     }
 
     public ArrayList<File> getSavedSnapshotFiles(){

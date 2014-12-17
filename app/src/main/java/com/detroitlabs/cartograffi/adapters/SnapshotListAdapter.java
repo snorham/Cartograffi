@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.detroitlabs.cartograffi.R;
+import com.detroitlabs.cartograffi.interfaces.SnapshopListItemShareListener;
 import com.detroitlabs.cartograffi.utils.CartograffiUtils;
 
 import java.io.File;
@@ -21,9 +22,12 @@ import java.util.ArrayList;
  */
 public class SnapshotListAdapter extends ArrayAdapter<File> {
     private Context context;
+    private SnapshopListItemShareListener shareListener;
+    private ArrayList<ImageButton> shareButtons = new ArrayList<ImageButton>();
 
-    public SnapshotListAdapter(Context context, ArrayList<File> files) {
+    public SnapshotListAdapter(SnapshopListItemShareListener shareListener, Context context, ArrayList<File> files) {
         super(context, R.layout.row_item_snapshot, files);
+        this.shareListener = shareListener;
         this.context = context;
     }
 
@@ -46,13 +50,18 @@ public class SnapshotListAdapter extends ArrayAdapter<File> {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         modifiedTextView.setText(sdf.format(mapFile.lastModified()));
 
-        ImageButton share = (ImageButton) convertView.findViewById(R.id.view_row_share_button);
+        final ImageButton share = (ImageButton) convertView.findViewById(R.id.view_row_share_button);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               CartograffiUtils.shareImageFile(context, mapFile);
+                for (ImageButton shareButton: shareButtons){
+                    shareButton.setEnabled(false);
+                }
+                shareListener.OnShare(shareButtons);
+                CartograffiUtils.shareImageFile(context, mapFile);
             }
         });
+        shareButtons.add(share);
 
         return convertView;
     }

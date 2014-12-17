@@ -1,13 +1,19 @@
 package com.detroitlabs.cartograffi.fragments;
 
 
+import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.Service;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,8 +35,6 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
     public static final File directory =
             new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Cartograffi");
 
-
-    //FOR LATER
     public static SaveFragment newInstance(Bitmap mapImage) {
         Bundle args = new Bundle();
         args.putParcelable(CreateFragment.MAP_IMAGE_KEY, mapImage);
@@ -44,9 +48,33 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.findItem(R.id.action_share).setVisible(false).setEnabled(false);
+        menu.findItem(R.id.action_hide).setVisible(false).setEnabled(false);
+        menu.findItem(R.id.action_save).setVisible(false).setEnabled(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                case android.R.id.home:
+                    closeKeyboard();
+                    getFragmentManager().popBackStack();
+                    return true;
+            }
+            return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         directory.mkdirs();
+        ActionBar ab = getActivity().getActionBar();
+        if (ab != null){
+            ab.setHomeButtonEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -54,6 +82,12 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_save, container, false);
+
+        if (getActivity().getActionBar() != null){
+            getActivity().getActionBar().setTitle(getString(R.string.title_activity_save));
+
+        }
+        setHasOptionsMenu(true);
 
         if (getArguments() != null) {
             mapImage = getArguments().getParcelable(CreateFragment.MAP_IMAGE_KEY);
@@ -74,8 +108,14 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.save_save_button:
+                closeKeyboard();
                 validateFilename();
         }
+    }
+
+    private void closeKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(filenameEditText.getWindowToken(), 0);
     }
 
     public void validateFilename() {
@@ -84,6 +124,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         Boolean validEntry = true;
         if (userEntry.length() < 1) {
             Toast.makeText(getActivity(), "You must first enter a filename", Toast.LENGTH_SHORT).show();
+            validEntry = false;
         } else if (userEntry.length() > 20) {
             Toast.makeText(getActivity(), "Filename must be 20 characters or under", Toast.LENGTH_SHORT).show();
             validEntry = false;
@@ -119,7 +160,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
                     mapImage.compress(Bitmap.CompressFormat.JPEG, 90, fos);
                     fos.close();
                     Toast.makeText(getActivity(), "File saved", Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
+                    getFragmentManager().popBackStack();
                 } catch (FileNotFoundException e) {
                     Toast.makeText(getActivity(), "File not found", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
