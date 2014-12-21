@@ -5,21 +5,22 @@
     android:layout_height="match_parent"
     tools:context="com.detroitlabs.cartograffi.fragments.CreateFragment">
 
+
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <fragment
-                  android:id="@+id/map"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:name="com.google.android.gms.maps.MapFragment"/>
+        <view
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.google.android.gms.maps.MapView"
+            android:id="@+id/mapView"/>
 
         <ToggleButton
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:text="New ToggleButton"
             android:id="@+id/create_draw_toggle"
             android:layout_gravity="left|bottom"
             android:textOff="@string/draw_button_off"

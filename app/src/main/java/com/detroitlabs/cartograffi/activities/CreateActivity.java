@@ -1,17 +1,20 @@
 package com.detroitlabs.cartograffi.activities;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.detroitlabs.cartograffi.fragments.CreateFragment;
 import com.detroitlabs.cartograffi.R;
+import com.detroitlabs.cartograffi.fragments.CreateFragment;
+import com.detroitlabs.cartograffi.fragments.SaveFragment;
 
 
 public class CreateActivity extends Activity {
+    private Menu menu;
+    CreateFragment createFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,28 +22,40 @@ public class CreateActivity extends Activity {
         setContentView(R.layout.activity_with_single_fragment);
 
         FragmentManager fragMan = getFragmentManager();
-        Fragment createFrag = fragMan.findFragmentById(R.id.container_frame);
-
-        if (createFrag == null) {
+        if(savedInstanceState == null){
             createFrag = new CreateFragment();
             fragMan.beginTransaction()
                     .add(R.id.container_frame, createFrag)
                     .commit();
         }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.create, menu);
+        this.menu = menu;
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
+        switch (item.getItemId()) {
+            case R.id.action_view_snapshots:
+                menu.setGroupEnabled(0,false);
+                SaveFragment.directory.mkdirs();
+                Intent viewSnapsIntent = new Intent(this, ViewSavedActivity.class);
+                startActivity(viewSnapsIntent);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

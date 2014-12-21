@@ -3,7 +3,6 @@ package com.detroitlabs.cartograffi.fragments;
 
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +27,8 @@ import java.text.SimpleDateFormat;
 public class ViewSavedDetailFragment extends Fragment implements View.OnClickListener {
     public static final String MAP_FILE_KEY = "mapFile";
     private File mapFile;
+    private Menu menu;
+    private Button deleteButton;
 
     //FOR LATER
     public static ViewSavedDetailFragment newInstance(File mapFile){
@@ -46,16 +47,19 @@ public class ViewSavedDetailFragment extends Fragment implements View.OnClickLis
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.findItem(R.id.action_share).setEnabled(true).setVisible(true);
+        this.menu = menu;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                goBackToMaster();
+                getFragmentManager().popBackStack();
                 return true;
 
             case R.id.action_share:
+                menu.setGroupEnabled(0, false);
+                deleteButton.setEnabled(false);
                 CartograffiUtils.shareImageFile(getActivity(), mapFile);
                 return true;
         }
@@ -75,7 +79,7 @@ public class ViewSavedDetailFragment extends Fragment implements View.OnClickLis
         }
 
         ActionBar ab = getActivity().getActionBar();
-        ab.setTitle(mapFile.getName());
+        if (ab != null) ab.setTitle(mapFile.getName());
 
         ImageView snapshotImageView = (ImageView)root.findViewById(R.id.view_detail_snapshot_container);
         snapshotImageView.setImageBitmap(CartograffiUtils.getBitmapFromFile(mapFile));
@@ -84,29 +88,30 @@ public class ViewSavedDetailFragment extends Fragment implements View.OnClickLis
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         modifiedTextView.setText(sdf.format(mapFile.lastModified()));
 
-        Button deleteButton = (Button)root.findViewById(R.id.view_detail_delete_button);
+        deleteButton = (Button)root.findViewById(R.id.view_detail_delete_button);
         deleteButton.setOnClickListener(this);
 
         return root;
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (menu != null){
+            menu.setGroupEnabled(0, true);
+        }
+        if (deleteButton != null){
+            deleteButton.setEnabled(true);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.view_detail_delete_button:
+                menu.setGroupEnabled(0, false);
                 mapFile.delete();
-                goBackToMaster();
-        }
-
-    }
-
-    public void goBackToMaster(){
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-
-        if (fragmentTransaction.isEmpty()) {
-            fragmentTransaction.replace(R.id.container_frame,new ViewSavedFragment());
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+                getFragmentManager().popBackStack();
         }
     }
 }
