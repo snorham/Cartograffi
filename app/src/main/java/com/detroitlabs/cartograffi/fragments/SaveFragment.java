@@ -69,7 +69,6 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        directory.mkdirs();
         ActionBar ab = getActivity().getActionBar();
         if (ab != null){
             ab.setHomeButtonEnabled(true);

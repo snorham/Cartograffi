@@ -27,12 +27,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".activities.StartActivity"
-            android:label="@string/title_activity_start"
-            android:screenOrientation="portrait" >
-        </activity>
-
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDoFCDsIouqCdb-C1-QGTi6Li8G-skqK_8" />

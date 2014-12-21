@@ -2,7 +2,9 @@ package com.detroitlabs.cartograffi.fragments;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ToggleButton;
@@ -21,6 +24,7 @@ import android.widget.ToggleButton;
 import com.detroitlabs.cartograffi.R;
 import com.detroitlabs.cartograffi.adapters.ColorsRecyclerAdapter;
 import com.detroitlabs.cartograffi.interfaces.ColorClickListener;
+import com.detroitlabs.cartograffi.utils.CartograffiUtils;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,6 +35,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,23 +43,28 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class CreateFragment extends Fragment implements View.OnClickListener, LocationListener, ColorClickListener, OnMapReadyCallback {
-    public final static String MAP_IMAGE_KEY = "MAP_IMAGE_KEY";
-    public final static String CAMERA_POSITION_KEY = "cameraPosition";
+    public static final String MAP_IMAGE_KEY = "MAP_IMAGE_KEY";
+    public static final String CAMERA_POSITION_KEY = "cameraPosition";
     public static final String POLYLINES_KEY = "polylines";
+    public static final String SELECTED_COLOR_INDEX_KEY = "selectedColorIndex";
+    public static final String DRAW_ON_KEY = "drawOn";
+
     private float defaultZoom;
     private GoogleMap googleMap;
     private LocationManager locationManager;
     private String locationProvider;
     private Polyline polyline;
     private boolean drawOn;
-    private int[] colors;
-    private int currentColor;
     private boolean hidden;
     private ToggleButton drawToggle;
     private Bundle savedInstanceState;
     private Menu menu;
     private MapView mapView;
+    private RecyclerView colorsRecycler;
     private ArrayList<Polyline> polylines = new ArrayList<Polyline>();
+    private int[] colors;
+    private boolean[] selectedStates;
+    private int selectedColorIndex;
 
     public CreateFragment() {
     }
@@ -66,40 +76,91 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        this.savedInstanceState = savedInstanceState;
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        GoogleMap.SnapshotReadyCallback snapshotReadyCallback;
+
+        switch (item.getItemId()){
+            case R.id.action_hide:
+                toggleMapUi();
+                return true;
+
+            case R.id.action_share:
+                menu.setGroupEnabled(0, false);
+                SaveFragment.directory.mkdirs();
+                snapshotReadyCallback = new GoogleMap.SnapshotReadyCallback() {
+                    @Override
+                    public void onSnapshotReady(Bitmap bitmap) {
+                        CartograffiUtils.shareBitmap(getActivity(), bitmap);
+                    }
+                };
+                captureMapImage(snapshotReadyCallback);
+                return true;
+
+            case R.id.action_save_snapshot:
+                menu.setGroupEnabled(0, false);
+                SaveFragment.directory.mkdirs();
+                snapshotReadyCallback = new GoogleMap.SnapshotReadyCallback() {
+                    @Override
+                    public void onSnapshotReady(Bitmap bitmap) {
+                        goToSaveScreen(bitmap);
+                    }
+                };
+                captureMapImage(snapshotReadyCallback);
+                return true;
+
+            case R.id.action_erase_map:
+                if (drawOn){
+                    drawToggle.callOnClick();
+                    drawToggle.setChecked(false);
+                }
+                polylines = new ArrayList<Polyline>();
+                googleMap.clear();
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_create, container, false);
-
-        mapView = (MapView)root.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        Log.d("CreateFragment", "onCreate");
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        colors = CartograffiUtils.getAllColorResources(getActivity());
+        selectedStates = new boolean[colors.length];
+        this.savedInstanceState = savedInstanceState;
 
         try {
             MapsInitializer.initialize(getActivity());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-        Log.d(CreateFragment.class.getName(), "OnCreateView");
-        currentColor = getResources().getColor(R.color.Black);
-        setColors();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("CreateFragment","onCreateView");
+        View root = inflater.inflate(R.layout.fragment_create, container, false);
+
+        loadDrawSettings();
+
+        mapView = (MapView)root.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
 
         drawToggle = (ToggleButton) root.findViewById(R.id.create_draw_toggle);
+        drawToggle.setChecked(drawOn);
         drawToggle.setOnClickListener(this);
 
-        RecyclerView colorsRecycler = (RecyclerView) root.findViewById(R.id.create_colors_recycler);
+        colorsRecycler = (RecyclerView) root.findViewById(R.id.create_colors_recycler);
         colorsRecycler.setHasFixedSize(true);
+        colorsRecycler.setSaveEnabled(false);
 
         LinearLayoutManager linLayoutMan = new LinearLayoutManager(getActivity());
         linLayoutMan.setOrientation(LinearLayoutManager.HORIZONTAL);
         colorsRecycler.setLayoutManager(linLayoutMan);
 
-        RecyclerView.Adapter recyclerAdapter = new ColorsRecyclerAdapter(this, colors);
+        RecyclerView.Adapter recyclerAdapter = new ColorsRecyclerAdapter(this, colors, selectedStates);
         colorsRecycler.setAdapter(recyclerAdapter);
 
         return root;
@@ -107,8 +168,13 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
     @Override
     public void onResume() {
+        Log.d("CreateFragment","OnResume");
         super.onResume();
         mapView.onResume();
+
+        if (CartograffiUtils.tempSharedFile.exists()){
+            CartograffiUtils.tempSharedFile.delete();
+        }
 
         ActionBar ab = getActivity().getActionBar();
         if (ab != null){
@@ -117,38 +183,15 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
             ab.setHomeButtonEnabled(false);
         }
 
-        if (savedInstanceState != null){
-
-            polylines = (ArrayList<Polyline>)savedInstanceState.getSerializable(POLYLINES_KEY);
-            Log.d(CreateFragment.class.getName(),"GETTING "+ polylines.size() + " POLYLINES");
-
-            defaultZoom = savedInstanceState.getFloat(CAMERA_POSITION_KEY, defaultZoom);
-            Log.d(CreateFragment.class.getName(),"GETTING DEFAULT ZOOM: "+ defaultZoom);
-        } else {
-            defaultZoom = 15;
-        }
-
         mapView.getMapAsync(this);
-
-        Log.d(CreateFragment.class.getName(), "OnResume");
-
-        if (menu != null){
-            menu.setGroupEnabled(0, true);
-        }
     }
 
     @Override
     public void onPause() {
+        Log.d("CreateFragment","onPause");
         super.onPause();
         mapView.onPause();
-
-        if(savedInstanceState == null){
-            savedInstanceState = new Bundle();
-        }
-
-        if(googleMap != null) savedInstanceState.putFloat(CAMERA_POSITION_KEY,googleMap.getCameraPosition().zoom);
-        savedInstanceState.putSerializable(POLYLINES_KEY, polylines);
-        Log.d(CreateFragment.class.getName(), "SAVING " + polylines.size() + " POLYLINES");
+        saveSettingsToBundle();
     }
 
     @Override
@@ -176,7 +219,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
                 drawOn = ((ToggleButton) v).isChecked();
 
                 if (drawOn) {
-                    startDrawing(currentColor);
+                    startDrawing(colors[selectedColorIndex]);
                 } else {
                     polyline = null;
                 }
@@ -184,12 +227,12 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     }
 
     @Override
-    public void onColorClick(int color) {
+    public void onColorClick(int selectedColorIndex) {
 
-        currentColor = color;
+        this.selectedColorIndex = selectedColorIndex;
 
         if (drawOn) {
-            startDrawing(currentColor);
+            startDrawing(colors[selectedColorIndex]);
         }
     }
 
@@ -210,35 +253,65 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        //required by location listener
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        //required by location listener
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        //required by location listener
-    }
-
-    @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(CreateFragment.class.getName(),"onMapReady");
         this.googleMap = googleMap;
+        loadMapSettings();
         setUpGoogleMap();
-        for (Polyline line: polylines){
-            PolylineOptions polylineOptions = new PolylineOptions();
 
-            for (LatLng point: line.getPoints()){
-                polylineOptions.add(point);
+        if (menu != null){
+            menu.setGroupEnabled(0, true);
+        }
+    }
+
+    public void saveSettingsToBundle() {
+        if(savedInstanceState == null){
+            savedInstanceState = new Bundle();
+        }
+
+        if(googleMap != null) savedInstanceState.putFloat(CAMERA_POSITION_KEY,googleMap.getCameraPosition().zoom);
+        savedInstanceState.putSerializable(POLYLINES_KEY, polylines);
+        savedInstanceState.putInt(SELECTED_COLOR_INDEX_KEY, selectedColorIndex);
+        savedInstanceState.putBoolean(DRAW_ON_KEY, drawOn);
+    }
+
+    public void loadMapSettings() {
+        if (savedInstanceState != null){
+
+            polylines = (ArrayList<Polyline>)savedInstanceState.getSerializable(POLYLINES_KEY);
+            if (polylines != null){
+                for (Polyline line: polylines){
+                    PolylineOptions polylineOptions = new PolylineOptions();
+
+                    for (LatLng point: line.getPoints()){
+                        polylineOptions.add(point);
+                    }
+
+                    polylineOptions.color(line.getColor());
+                    googleMap.addPolyline(polylineOptions);
+                }
+            } else {
+                polylines = new ArrayList<Polyline>();
             }
 
-            polylineOptions.color(line.getColor());
-            googleMap.addPolyline(polylineOptions);
+            defaultZoom = savedInstanceState.getFloat(CAMERA_POSITION_KEY, defaultZoom);
+            if (defaultZoom == 0) defaultZoom = 15;
+
+        } else {
+            defaultZoom = 15;
         }
+    }
+
+    public void loadDrawSettings(){
+        if (savedInstanceState != null){
+            selectedColorIndex = savedInstanceState.getInt(SELECTED_COLOR_INDEX_KEY, 0);
+            drawOn = savedInstanceState.getBoolean(DRAW_ON_KEY, false);
+        } else {
+            selectedColorIndex = 0;
+            drawOn = false;
+        }
+
+        selectedStates[selectedColorIndex] = true;
     }
 
     private void initializeLocationManager() {
@@ -259,20 +332,6 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         if (userLocation != null) {
             onLocationChanged(userLocation);
         }
-    }
-
-    public void setColors() {
-        colors = new int[]{
-                getResources().getColor(R.color.Black),
-                getResources().getColor(R.color.White),
-                getResources().getColor(R.color.Gray),
-                getResources().getColor(R.color.Red),
-                getResources().getColor(R.color.Orange),
-                getResources().getColor(R.color.Yellow),
-                getResources().getColor(R.color.Green),
-                getResources().getColor(R.color.Blue),
-                getResources().getColor(R.color.Indigo),
-                getResources().getColor(R.color.Violet)};
     }
 
     public void startDrawing(int color) {
@@ -303,6 +362,17 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         });
     }
 
+    public void goToSaveScreen(Bitmap bitmap) {
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bs);
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+        fragmentTransaction.replace(R.id.container_frame, SaveFragment.newInstance(bitmap));
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
     public void setMapUiEnabled(boolean enabled){
         googleMap.setMyLocationEnabled(enabled);
         googleMap.getUiSettings().setZoomControlsEnabled(enabled);
@@ -314,12 +384,14 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         } else {
             drawToggle.setVisibility(View.INVISIBLE);
         }
+
+        hidden = !enabled;
     }
 
     private void setUpGoogleMap() {
-        initializeLocationManager();
 
         setMapUiEnabled(true);
+        initializeLocationManager();
         googleMap.getUiSettings().setAllGesturesEnabled(true);
 
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(defaultZoom);
@@ -329,11 +401,23 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     public void toggleMapUi() {
         if (hidden) {
             setMapUiEnabled(true);
-            hidden = false;
-
         } else {
             setMapUiEnabled(false);
-            hidden = true;
         }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        //required by location listener... but not being used
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        //required by location listener... but not being used
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        //required by location listener... but not being used
     }
 }

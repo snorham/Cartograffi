@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.detroitlabs.cartograffi.R;
-import com.detroitlabs.cartograffi.activities.CreateActivity;
 import com.detroitlabs.cartograffi.adapters.SnapshotListAdapter;
 import com.detroitlabs.cartograffi.interfaces.SnapshopListItemShareListener;
 
@@ -39,10 +38,6 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        File sharedFile = CreateActivity.sharedFile;
-        if(sharedFile.exists()){
-            sharedFile.delete();
-        }
     }
 
     @Override

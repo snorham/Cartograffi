@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.detroitlabs.cartograffi.R;
 import com.detroitlabs.cartograffi.interfaces.SnapshopListItemShareListener;
@@ -54,6 +55,7 @@ public class SnapshotListAdapter extends ArrayAdapter<File> {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((ToggleButton)v).setChecked(true);
                 for (ImageButton shareButton: shareButtons){
                     shareButton.setEnabled(false);
                 }
