@@ -61,8 +61,8 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
             if (colors[i] == colors[0]) {
                 viewHolder.colorButton.setTextColor(colors[1]);
             }
-
             viewHolder.colorButton.setText("SELECTED");
+
         } else {
             viewHolder.colorButton.setText(null);
         }
@@ -70,14 +70,13 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
         viewHolder.colorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 for (int j = 0; j < selectedStates.length; j++) {
                     selectedStates[j] = false;
                 }
                 selectedStates[i] = true;
 
                 notifyDataSetChanged();
-
-                //this interface needs some hardcore changing
                 colorClickListener.onColorClick(i);
             }
         });
@@ -88,17 +87,4 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
     public int getItemCount() {
         return colors.length;
     }
-
-    public void selectColor(){
-
-    }
-
-    public boolean[] getSelectedStates() {
-        return selectedStates;
-    }
-
-    public void setSelectedStates(boolean[] selectedStates) {
-        this.selectedStates = selectedStates;
-    }
-
 }

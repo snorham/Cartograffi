@@ -12,7 +12,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -60,7 +59,6 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     private Bundle savedInstanceState;
     private Menu menu;
     private MapView mapView;
-    private RecyclerView colorsRecycler;
     private ArrayList<Polyline> polylines = new ArrayList<Polyline>();
     private int[] colors;
     private boolean[] selectedStates;
@@ -77,7 +75,6 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         GoogleMap.SnapshotReadyCallback snapshotReadyCallback;
 
         switch (item.getItemId()){
@@ -116,20 +113,18 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
                 }
                 polylines = new ArrayList<Polyline>();
                 googleMap.clear();
-
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d("CreateFragment", "onCreate");
         super.onCreate(savedInstanceState);
+        this.savedInstanceState = savedInstanceState;
         setHasOptionsMenu(true);
+
         colors = CartograffiUtils.getAllColorResources(getActivity());
         selectedStates = new boolean[colors.length];
-        this.savedInstanceState = savedInstanceState;
 
         try {
             MapsInitializer.initialize(getActivity());
@@ -140,7 +135,6 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("CreateFragment","onCreateView");
         View root = inflater.inflate(R.layout.fragment_create, container, false);
 
         loadDrawSettings();
@@ -152,7 +146,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         drawToggle.setChecked(drawOn);
         drawToggle.setOnClickListener(this);
 
-        colorsRecycler = (RecyclerView) root.findViewById(R.id.create_colors_recycler);
+        RecyclerView colorsRecycler = (RecyclerView) root.findViewById(R.id.create_colors_recycler);
         colorsRecycler.setHasFixedSize(true);
         colorsRecycler.setSaveEnabled(false);
 
@@ -168,7 +162,6 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
     @Override
     public void onResume() {
-        Log.d("CreateFragment","OnResume");
         super.onResume();
         mapView.onResume();
 
@@ -188,9 +181,9 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
     @Override
     public void onPause() {
-        Log.d("CreateFragment","onPause");
         super.onPause();
         mapView.onPause();
+
         saveSettingsToBundle();
     }
 
@@ -215,9 +208,9 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
             case R.id.create_draw_toggle:
                 drawOn = ((ToggleButton) v).isChecked();
-
                 if (drawOn) {
                     startDrawing(colors[selectedColorIndex]);
                 } else {
@@ -228,11 +221,10 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
     @Override
     public void onColorClick(int selectedColorIndex) {
-
         this.selectedColorIndex = selectedColorIndex;
 
         if (drawOn) {
-            startDrawing(colors[selectedColorIndex]);
+            startDrawing(colors[this.selectedColorIndex]);
         }
     }
 
@@ -254,7 +246,6 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d(CreateFragment.class.getName(),"onMapReady");
         this.googleMap = googleMap;
         loadMapSettings();
         setUpGoogleMap();
@@ -279,7 +270,9 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         if (savedInstanceState != null){
 
             polylines = (ArrayList<Polyline>)savedInstanceState.getSerializable(POLYLINES_KEY);
+
             if (polylines != null){
+
                 for (Polyline line: polylines){
                     PolylineOptions polylineOptions = new PolylineOptions();
 
@@ -290,6 +283,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
                     polylineOptions.color(line.getColor());
                     googleMap.addPolyline(polylineOptions);
                 }
+
             } else {
                 polylines = new ArrayList<Polyline>();
             }
