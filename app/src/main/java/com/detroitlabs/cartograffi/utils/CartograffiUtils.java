@@ -68,7 +68,7 @@ public class CartograffiUtils {
     }
 
     public static int[] getAllColorResources(Context context){
-        int[] colors = new int[]{
+        return new int[]{
                 context.getResources().getColor(R.color.Black),
                 context.getResources().getColor(R.color.White),
                 context.getResources().getColor(R.color.Gray),
@@ -79,7 +79,5 @@ public class CartograffiUtils {
                 context.getResources().getColor(R.color.Blue),
                 context.getResources().getColor(R.color.Indigo),
                 context.getResources().getColor(R.color.Violet)};
-
-        return colors;
     }
 }
