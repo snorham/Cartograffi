@@ -58,6 +58,7 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
 
             //NOT THE RIGHT WAY TO MAKE THE TEXT ON THE BLACK BUTTON WHITE..
             //but I'm leaving it for now and tackling bigger issues
+            //ALSO... YELLOW TURNS WHITE!?!?!?
             if (colors[i] == colors[0]) {
                 viewHolder.colorButton.setTextColor(colors[1]);
             }
