@@ -124,9 +124,6 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         if (userEntry.length() < 1) {
             Toast.makeText(getActivity(), "You must first enter a filename", Toast.LENGTH_SHORT).show();
             validEntry = false;
-        } else if (userEntry.length() > 20) {
-            Toast.makeText(getActivity(), "Filename must be 20 characters or under", Toast.LENGTH_SHORT).show();
-            validEntry = false;
         } else {
             for (char currentChar : userEntry.toCharArray()) {
                 if (!(Character.isLetterOrDigit(currentChar) || currentChar == '_' || currentChar == '-' || currentChar == '.')) {
