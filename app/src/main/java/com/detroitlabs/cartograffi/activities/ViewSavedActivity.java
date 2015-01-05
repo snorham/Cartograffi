@@ -11,7 +11,6 @@ import com.detroitlabs.cartograffi.fragments.ViewSavedFragment;
 
 public class ViewSavedActivity extends Activity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,16 +33,6 @@ public class ViewSavedActivity extends Activity {
         getMenuInflater().inflate(R.menu.view_saved, menu);
         menu.findItem(R.id.action_share).setEnabled(false).setVisible(false);
         return true;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 }
 
