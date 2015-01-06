@@ -57,25 +57,8 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
     public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
         viewHolder.colorButton.setBackgroundColor(colors[i]);
         if (selectedStates[i]){
-
-            //NOT THE RIGHT WAY TO MAKE THE TEXT ON THE BLACK BUTTON WHITE..
-            //but I'm leaving it for now and tackling bigger issues
-            //ALSO... YELLOW TURNS WHITE!?!?!?
-
-/*
-            if (colors[i] == colors[0]) {
-                viewHolder.colorButton.setTextColor(colors[1]);
-            }
-
-*/
-
-            if(colors[i] == Color.BLACK){
-                viewHolder.colorButton.setTextColor(Color.WHITE);
-             //   Log.i("iIs", "i is: "+ String.valueOf(i));
-
-            }
-
-
+            int colorForText = setTextColorForColorButton(colors[i]);
+            viewHolder.colorButton.setTextColor(colorForText);
             viewHolder.colorButton.setText("SELECTED");
             Log.i("iIs", "i is: "+ String.valueOf(i));
 
@@ -86,18 +69,16 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
         viewHolder.colorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                for (int j = 0; j < selectedStates.length; j++) {
-                    selectedStates[j] = false;
-                }
-                selectedStates[i] = true;
+                setSelectedStatesOnClick(i);
                 notifyDataSetChanged();
                 colorClickListener.onColorClick(i);
             }
         });
     }
 
-    public void setSelectedState(int itemSelected){
+    //Method to set the selected state array to true of button is clicked.
+
+    public void setSelectedStatesOnClick(int itemSelected){
         for(int i = 0; i < selectedStates.length; i++){
             if(i == itemSelected){
                 selectedStates[i] = true;
@@ -108,9 +89,12 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
         }
     }
 
-    public int setTextColorForColorButton(int colorResourceID){
-        switch (colorResourceID){
-            case R.color.Black:
+    //Method to return the proper color for text based on the color of the button.
+
+    public int setTextColorForColorButton(int buttonColor){
+        switch (buttonColor){
+            case Color.BLACK:
+                Log.i("black", "black");
                 return Color.WHITE;
             default:
                 return Color.BLACK;
