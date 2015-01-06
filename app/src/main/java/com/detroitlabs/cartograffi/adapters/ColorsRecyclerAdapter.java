@@ -1,6 +1,8 @@
 package com.detroitlabs.cartograffi.adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,7 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
 
         ViewHolder viewHolder = new ViewHolder(colorButton);
 
+
         return viewHolder;
     }
 
@@ -53,16 +56,28 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
         viewHolder.colorButton.setBackgroundColor(colors[i]);
-
         if (selectedStates[i]){
 
             //NOT THE RIGHT WAY TO MAKE THE TEXT ON THE BLACK BUTTON WHITE..
             //but I'm leaving it for now and tackling bigger issues
             //ALSO... YELLOW TURNS WHITE!?!?!?
+
+/*
             if (colors[i] == colors[0]) {
                 viewHolder.colorButton.setTextColor(colors[1]);
             }
+
+*/
+
+            if(colors[i] == Color.BLACK){
+                viewHolder.colorButton.setTextColor(Color.WHITE);
+             //   Log.i("iIs", "i is: "+ String.valueOf(i));
+
+            }
+
+
             viewHolder.colorButton.setText("SELECTED");
+            Log.i("iIs", "i is: "+ String.valueOf(i));
 
         } else {
             viewHolder.colorButton.setText(null);
@@ -76,11 +91,30 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
                     selectedStates[j] = false;
                 }
                 selectedStates[i] = true;
-
                 notifyDataSetChanged();
                 colorClickListener.onColorClick(i);
             }
         });
+    }
+
+    public void setSelectedState(int itemSelected){
+        for(int i = 0; i < selectedStates.length; i++){
+            if(i == itemSelected){
+                selectedStates[i] = true;
+            }
+            else{
+                selectedStates[i] = false;
+            }
+        }
+    }
+
+    public int setTextColorForColorButton(int colorResourceID){
+        switch (colorResourceID){
+            case R.color.Black:
+                return Color.WHITE;
+            default:
+                return Color.BLACK;
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
