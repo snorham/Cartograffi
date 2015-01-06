@@ -64,6 +64,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     private boolean[] selectedStates;
     private int selectedColorIndex;
 
+
     public CreateFragment() {
     }
 
@@ -156,6 +157,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
         RecyclerView.Adapter recyclerAdapter = new ColorsRecyclerAdapter(this, colors, selectedStates);
         colorsRecycler.setAdapter(recyclerAdapter);
+        colorsRecycler.scrollToPosition(selectedColorIndex);
 
         return root;
     }
@@ -264,6 +266,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         savedInstanceState.putSerializable(POLYLINES_KEY, polylines);
         savedInstanceState.putInt(SELECTED_COLOR_INDEX_KEY, selectedColorIndex);
         savedInstanceState.putBoolean(DRAW_ON_KEY, drawOn);
+
     }
 
     public void loadMapSettings() {
@@ -300,6 +303,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         if (savedInstanceState != null){
             selectedColorIndex = savedInstanceState.getInt(SELECTED_COLOR_INDEX_KEY, 0);
             drawOn = savedInstanceState.getBoolean(DRAW_ON_KEY, false);
+
         } else {
             selectedColorIndex = 0;
             drawOn = false;
