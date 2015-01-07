@@ -114,4 +114,8 @@ public class ViewSavedDetailFragment extends Fragment implements View.OnClickLis
                 getFragmentManager().popBackStack();
         }
     }
+
+    public void deleteConfirmDialog(){
+
+    }
 }
