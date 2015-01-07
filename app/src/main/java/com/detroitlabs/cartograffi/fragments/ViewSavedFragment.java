@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.detroitlabs.cartograffi.R;
 import com.detroitlabs.cartograffi.adapters.SnapshotListAdapter;
@@ -53,15 +52,11 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
 
         ArrayList<File> files = getSavedSnapshotFiles();
 
-        if (files == null || files.size()< 1){
-            Toast.makeText(getActivity(),"No saved files",Toast.LENGTH_SHORT).show();
+        snapshotListAdapter = new SnapshotListAdapter(this,getActivity(),files);
+        snapshotListView = (ListView) root.findViewById(R.id.view_saved_listview);
+        snapshotListView.setAdapter(snapshotListAdapter);
+        snapshotListView.setOnItemClickListener(this);
 
-        } else {
-            snapshotListAdapter = new SnapshotListAdapter(this,getActivity(),files);
-            snapshotListView = (ListView) root.findViewById(R.id.view_saved_listview);
-            snapshotListView.setAdapter(snapshotListAdapter);
-            snapshotListView.setOnItemClickListener(this);
-        }
         return root;
     }
 
