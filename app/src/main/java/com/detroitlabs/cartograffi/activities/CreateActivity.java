@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -46,10 +47,16 @@ public class CreateActivity extends Activity {
             case R.id.action_view_snapshots:
                 menu.setGroupEnabled(0,false);
                 SaveFragment.directory.mkdirs();
-                Intent viewSnapsIntent = new Intent(this, ViewSavedActivity.class);
-                startActivity(viewSnapsIntent);
+                if(SaveFragment.directory.list().length < 1){
+                    Log.i("lessThan1", "there is less than 1 file");
+                }
+                else {
+                    Intent viewSnapsIntent = new Intent(this, ViewSavedActivity.class);
+                    startActivity(viewSnapsIntent);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
+
     }
 }

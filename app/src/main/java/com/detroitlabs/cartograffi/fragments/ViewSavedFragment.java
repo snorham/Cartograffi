@@ -58,7 +58,6 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
 
         } else {
             snapshotListAdapter = new SnapshotListAdapter(this,getActivity(),files);
-
             snapshotListView = (ListView) root.findViewById(R.id.view_saved_listview);
             snapshotListView.setAdapter(snapshotListAdapter);
             snapshotListView.setOnItemClickListener(this);
