@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.detroitlabs.cartograffi.R;
 import com.detroitlabs.cartograffi.fragments.CreateFragment;
@@ -47,16 +47,21 @@ public class CreateActivity extends Activity {
             case R.id.action_view_snapshots:
                 menu.setGroupEnabled(0,false);
                 SaveFragment.directory.mkdirs();
-                if(SaveFragment.directory.list().length < 1){
-                    Log.i("lessThan1", "there is less than 1 file");
-                }
-                else {
-                    Intent viewSnapsIntent = new Intent(this, ViewSavedActivity.class);
-                    startActivity(viewSnapsIntent);
-                }
-                return true;
+                return viewSnapshotsSelected();
         }
         return super.onOptionsItemSelected(item);
+    }
 
+    public boolean viewSnapshotsSelected(){
+        if(SaveFragment.directory.list().length < 1){
+            Toast.makeText(this, "No saved files", Toast.LENGTH_SHORT).show();
+            menu.setGroupEnabled(0, true);
+            return false;
+        }
+        else {
+            Intent viewSnapsIntent = new Intent(this, ViewSavedActivity.class);
+            startActivity(viewSnapsIntent);
+            return true;
+        }
     }
 }

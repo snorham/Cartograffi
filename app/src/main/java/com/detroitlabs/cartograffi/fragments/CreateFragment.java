@@ -114,6 +114,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
                 }
                 polylines = new ArrayList<Polyline>();
                 googleMap.clear();
+
         }
         return super.onOptionsItemSelected(item);
     }
