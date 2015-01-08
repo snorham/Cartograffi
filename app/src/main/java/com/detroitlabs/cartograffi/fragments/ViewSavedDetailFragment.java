@@ -112,9 +112,6 @@ public class ViewSavedDetailFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.view_detail_delete_button:
-/*                menu.setGroupEnabled(0, false);
-                mapFile.delete();
-                getFragmentManager().popBackStack();*/
                 deleteConfirmationDialog();
         }
     }
