@@ -22,6 +22,7 @@ import android.widget.ToggleButton;
 
 import com.detroitlabs.cartograffi.R;
 import com.detroitlabs.cartograffi.adapters.ColorsRecyclerAdapter;
+import com.detroitlabs.cartograffi.fragments.DeleteConfirmationDialogFragment.DeleteConfirmationInterface;
 import com.detroitlabs.cartograffi.interfaces.ColorClickListener;
 import com.detroitlabs.cartograffi.utils.CartograffiUtils;
 import com.google.android.gms.maps.CameraUpdate;
@@ -402,6 +403,22 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         } else {
             setMapUiEnabled(false);
         }
+    }
+
+    public void displayDeleteConfirmationDialog(){
+        final DeleteConfirmationDialogFragment deleteDialog = DeleteConfirmationDialogFragment.newInstance(new DeleteConfirmationInterface() {
+            @Override
+            public void onDialogClick(boolean confirmationClick) {
+                if(confirmationClick){
+                    if (drawOn){
+                        drawToggle.callOnClick();
+                        drawToggle.setChecked(false);
+                    }
+                    polylines = new ArrayList<Polyline>();
+                    googleMap.clear();
+                }
+            }
+        });
     }
 
     @Override
