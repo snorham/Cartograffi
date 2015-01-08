@@ -34,13 +34,13 @@ public class DeleteConfirmationDialogFragment extends DialogFragment {
         deleteConfirmation.setPositiveButton(R.string.view_detail_delete_confirm_positive, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                confirmationInterface.onDialogClick(true);
             }
         });
         deleteConfirmation.setNegativeButton(R.string.view_detail_delete_confirm_negative, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // dialog is dismisssed
+                confirmationInterface.onDialogClick(false);
             }
         });
         return deleteConfirmation.create();
