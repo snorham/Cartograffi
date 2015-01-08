@@ -263,7 +263,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
         if(googleMap != null) savedInstanceState.putFloat(CAMERA_ZOOM_KEY,googleMap.getCameraPosition().zoom);
 
-        savedInstanceState.putParcelable("mapTrial", googleMap.getCameraPosition());
+        savedInstanceState.putParcelable(CAMERA_POSITION_KEY, googleMap.getCameraPosition());
 
         savedInstanceState.putSerializable(POLYLINES_KEY, polylines);
         savedInstanceState.putInt(SELECTED_COLOR_INDEX_KEY, selectedColorIndex);
