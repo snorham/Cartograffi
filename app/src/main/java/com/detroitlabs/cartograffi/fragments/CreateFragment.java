@@ -419,12 +419,18 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         deleteDialog.show(getFragmentManager(), "DeleteDialog");
     }
 
-    public void displayLoadingWheelProgressDialog(){
+    public void displayLoadingWheelProgressDialog(boolean displayProgress){
         ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getActivity().getResources().getString(R.string.progress_dialog));
-        progressDialog.setProgress(300);
-        progressDialog.show();
+        progressDialog.isIndeterminate();
+        if(displayProgress) {
+            progressDialog.show();
+        }
+        else{
+            progressDialog.dismiss();
+        }
     }
+
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
