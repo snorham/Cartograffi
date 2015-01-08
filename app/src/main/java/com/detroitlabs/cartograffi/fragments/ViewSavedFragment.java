@@ -52,17 +52,15 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
         }
 
         ArrayList<File> files = getSavedSnapshotFiles();
-
-        if (files == null || files.size()< 1){
-            Toast.makeText(getActivity(),"No saved files",Toast.LENGTH_SHORT).show();
-
-        } else {
-            snapshotListAdapter = new SnapshotListAdapter(this,getActivity(),files);
-
+        if(SaveFragment.directory.list().length < 1) {
+            Toast.makeText(getActivity(), "No saved files", Toast.LENGTH_SHORT).show();
+        }else {
+            snapshotListAdapter = new SnapshotListAdapter(this, getActivity(), files);
             snapshotListView = (ListView) root.findViewById(R.id.view_saved_listview);
             snapshotListView.setAdapter(snapshotListAdapter);
             snapshotListView.setOnItemClickListener(this);
         }
+
         return root;
     }
 
