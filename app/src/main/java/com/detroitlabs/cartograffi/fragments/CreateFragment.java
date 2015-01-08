@@ -262,9 +262,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         }
 
         if(googleMap != null) savedInstanceState.putFloat(CAMERA_ZOOM_KEY,googleMap.getCameraPosition().zoom);
-
         savedInstanceState.putParcelable(CAMERA_POSITION_KEY, googleMap.getCameraPosition());
-
         savedInstanceState.putSerializable(POLYLINES_KEY, polylines);
         savedInstanceState.putInt(SELECTED_COLOR_INDEX_KEY, selectedColorIndex);
         savedInstanceState.putBoolean(DRAW_ON_KEY, drawOn);
@@ -296,7 +294,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
             defaultZoom = savedInstanceState.getFloat(CAMERA_ZOOM_KEY, defaultZoom);
             if (defaultZoom == 0) defaultZoom = 15;
 
-            CameraPosition cameraPosition = savedInstanceState.getParcelable("mapTrial");
+            cameraPosition = savedInstanceState.getParcelable(CAMERA_POSITION_KEY);
             CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
             googleMap.moveCamera(cameraUpdate);
 
