@@ -65,6 +65,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     private int[] colors;
     private boolean[] selectedStates;
     private int selectedColorIndex;
+    private ProgressDialog progressDialog;
 
 
     public CreateFragment() {
@@ -361,7 +362,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     public void goToSaveScreen(Bitmap bitmap) {
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, bs);
-
+        dismissLoadingWheelProgressDialog();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
         fragmentTransaction.replace(R.id.container_frame, SaveFragment.newInstance(bitmap));
@@ -419,17 +420,17 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         deleteDialog.show(getFragmentManager(), "DeleteDialog");
     }
 
-    public void displayLoadingWheelProgressDialog(boolean displayProgress){
-        ProgressDialog progressDialog = new ProgressDialog(getActivity());
+    public void displayLoadingWheelProgressDialog(){
+        progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getActivity().getResources().getString(R.string.progress_dialog));
-        progressDialog.isIndeterminate();
-        if(displayProgress) {
-            progressDialog.show();
-        }
-        else{
-            progressDialog.dismiss();
-        }
+        progressDialog.show();
     }
+
+    public void dismissLoadingWheelProgressDialog(){
+        progressDialog.dismiss();
+    }
+
+
 
 
     @Override
