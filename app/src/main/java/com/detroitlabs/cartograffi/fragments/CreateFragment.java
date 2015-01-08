@@ -423,6 +423,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     public void displayLoadingWheelProgressDialog(){
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage(getActivity().getResources().getString(R.string.progress_dialog));
+        progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
