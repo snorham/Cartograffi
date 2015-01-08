@@ -109,12 +109,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
                 return true;
 
             case R.id.action_erase_map:
-                if (drawOn){
-                    drawToggle.callOnClick();
-                    drawToggle.setChecked(false);
-                }
-                polylines = new ArrayList<Polyline>();
-                googleMap.clear();
+                displayDeleteConfirmationDialog();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -419,6 +414,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
                 }
             }
         });
+        deleteDialog.show(getFragmentManager(), "DeleteDialog");
     }
 
     @Override
