@@ -45,12 +45,14 @@ import java.util.List;
  */
 public class CreateFragment extends Fragment implements View.OnClickListener, LocationListener, ColorClickListener, OnMapReadyCallback {
     public static final String MAP_IMAGE_KEY = "MAP_IMAGE_KEY";
+    public static final String CAMERA_ZOOM_KEY = "cameraZoom";
     public static final String CAMERA_POSITION_KEY = "cameraPosition";
     public static final String POLYLINES_KEY = "polylines";
     public static final String SELECTED_COLOR_INDEX_KEY = "selectedColorIndex";
     public static final String DRAW_ON_KEY = "drawOn";
 
     private float defaultZoom;
+    private CameraPosition cameraPosition;
     private GoogleMap googleMap;
     private LocationManager locationManager;
     private String locationProvider;
@@ -259,7 +261,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
             savedInstanceState = new Bundle();
         }
 
-        if(googleMap != null) savedInstanceState.putFloat(CAMERA_POSITION_KEY,googleMap.getCameraPosition().zoom);
+        if(googleMap != null) savedInstanceState.putFloat(CAMERA_ZOOM_KEY,googleMap.getCameraPosition().zoom);
 
         savedInstanceState.putParcelable("mapTrial", googleMap.getCameraPosition());
 
@@ -291,7 +293,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
                 polylines = new ArrayList<Polyline>();
             }
 
-            defaultZoom = savedInstanceState.getFloat(CAMERA_POSITION_KEY, defaultZoom);
+            defaultZoom = savedInstanceState.getFloat(CAMERA_ZOOM_KEY, defaultZoom);
             if (defaultZoom == 0) defaultZoom = 15;
 
             CameraPosition cameraPosition = savedInstanceState.getParcelable("mapTrial");
