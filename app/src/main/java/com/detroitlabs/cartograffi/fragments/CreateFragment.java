@@ -31,6 +31,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -259,6 +260,9 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         }
 
         if(googleMap != null) savedInstanceState.putFloat(CAMERA_POSITION_KEY,googleMap.getCameraPosition().zoom);
+
+        savedInstanceState.putParcelable("mapTrial", googleMap.getCameraPosition());
+
         savedInstanceState.putSerializable(POLYLINES_KEY, polylines);
         savedInstanceState.putInt(SELECTED_COLOR_INDEX_KEY, selectedColorIndex);
         savedInstanceState.putBoolean(DRAW_ON_KEY, drawOn);
@@ -289,6 +293,10 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
             defaultZoom = savedInstanceState.getFloat(CAMERA_POSITION_KEY, defaultZoom);
             if (defaultZoom == 0) defaultZoom = 15;
+
+            CameraPosition cameraPosition = savedInstanceState.getParcelable("mapTrial");
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+            googleMap.moveCamera(cameraUpdate);
 
         } else {
             defaultZoom = 15;
