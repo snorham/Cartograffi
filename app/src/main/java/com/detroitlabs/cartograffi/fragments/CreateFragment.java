@@ -99,6 +99,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
             case R.id.action_save_snapshot:
                 menu.setGroupEnabled(0, false);
+                displayLoadingWheelProgressDialog();
                 SaveFragment.directory.mkdirs();
                 snapshotReadyCallback = new GoogleMap.SnapshotReadyCallback() {
                     @Override
