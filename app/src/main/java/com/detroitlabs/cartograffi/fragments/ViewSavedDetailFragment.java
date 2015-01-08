@@ -4,6 +4,8 @@ package com.detroitlabs.cartograffi.fragments;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -117,11 +119,23 @@ public class ViewSavedDetailFragment extends Fragment implements View.OnClickLis
     }
 
     public void deleteConfirmationDialog(){
-        AlertDialog.Builder deleteConfirmation = new AlertDialog.Builder(getActivity());
-        deleteConfirmation.setTitle(R.string.view_detail_delete_confirm);
-        deleteConfirmation.setMessage(R.string.view_detail_delete_confirm);
-        deleteConfirmation.setPositiveButton();
-        deleteConfirmation.setNegativeButton();
+        final AlertDialog.Builder deleteConfirmation = new AlertDialog.Builder(getActivity());
+        deleteConfirmation.setTitle(R.string.view_detail_delete_confirm_title);
+        deleteConfirmation.setMessage(R.string.view_detail_delete_confirm_message);
+        deleteConfirmation.setPositiveButton(R.string.view_detail_delete_confirm_positive, new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                menu.setGroupEnabled(0, false);
+                mapFile.delete();
+                getFragmentManager().popBackStack();
+            }
+        });
+        deleteConfirmation.setNegativeButton(R.string.view_detail_delete_confirm_negative, new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               // dialog is dismisssed
+            }
+        });
 
     }
 }
