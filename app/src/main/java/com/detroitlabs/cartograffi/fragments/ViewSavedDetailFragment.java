@@ -2,10 +2,7 @@ package com.detroitlabs.cartograffi.fragments;
 
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.detroitlabs.cartograffi.R;
+import com.detroitlabs.cartograffi.fragments.DeleteConfirmationDialogFragment.DeleteConfirmationInterface;
 import com.detroitlabs.cartograffi.utils.CartograffiUtils;
 
 import java.io.File;
@@ -112,29 +110,21 @@ public class ViewSavedDetailFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.view_detail_delete_button:
-                deleteConfirmationDialog();
+               displayDeleteConfirmationDialog();
         }
     }
 
-    public void deleteConfirmationDialog(){
-        final AlertDialog.Builder deleteConfirmation = new AlertDialog.Builder(getActivity());
-        deleteConfirmation.setTitle(R.string.view_detail_delete_confirm_title);
-        deleteConfirmation.setMessage(R.string.view_detail_delete_confirm_message);
-        deleteConfirmation.setPositiveButton(R.string.view_detail_delete_confirm_positive, new OnClickListener() {
+    public void displayDeleteConfirmationDialog(){
+        DeleteConfirmationDialogFragment deleteDialog = DeleteConfirmationDialogFragment.newInstance(new DeleteConfirmationInterface() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                menu.setGroupEnabled(0, false);
-                mapFile.delete();
-                getFragmentManager().popBackStack();
+            public void onDialogClick(boolean confirmationClick) {
+                if(confirmationClick){
+                    menu.setGroupEnabled(0, false);
+                    mapFile.delete();
+                    getFragmentManager().popBackStack();
+                }
             }
         });
-        deleteConfirmation.setNegativeButton(R.string.view_detail_delete_confirm_negative, new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-               // dialog is dismisssed
-            }
-        });
-        deleteConfirmation.show();
-
+        deleteDialog.show(getFragmentManager(), "DeleteDialog");
     }
 }
