@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.detroitlabs.cartograffi.R;
+import com.detroitlabs.cartograffi.fragments.DeleteConfirmationDialogFragment.DeleteConfirmationInterface;
 import com.detroitlabs.cartograffi.utils.CartograffiUtils;
 
 import java.io.File;
@@ -109,9 +110,21 @@ public class ViewSavedDetailFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.view_detail_delete_button:
-                menu.setGroupEnabled(0, false);
-                mapFile.delete();
-                getFragmentManager().popBackStack();
+               displayDeleteConfirmationDialog();
         }
+    }
+
+    public void displayDeleteConfirmationDialog(){
+        DeleteConfirmationDialogFragment deleteDialog = DeleteConfirmationDialogFragment.newInstance(new DeleteConfirmationInterface() {
+            @Override
+            public void onDialogClick(boolean confirmationClick) {
+                if(confirmationClick){
+                    menu.setGroupEnabled(0, false);
+                    mapFile.delete();
+                    getFragmentManager().popBackStack();
+                }
+            }
+        });
+        deleteDialog.show(getFragmentManager(), "DeleteDialog");
     }
 }
