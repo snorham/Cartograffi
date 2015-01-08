@@ -29,9 +29,11 @@
 
     <!--VIEW SAVED DETAILS-->
     <string name="view_detail_delete">(touch trash to permanently delete)</string>
-    <string name="view_detail_delete_confirm_title">Delete Confirmation</string>
-    <string name="view_detail_delete_confirm_message">Are you sure you want to delete this?</string>
-    <string name="view_detail_delete_confirm_positive">Yes</string>
-    <string name="view_detail_delete_confirm_negative">Cancel</string>
+
+    <!-- DELETE CONFIRMATION DIALOG -->
+    <string name="delete_confirm_title">Delete Confirmation</string>
+    <string name="delete_confirm_message">Are you sure you want to delete this?</string>
+    <string name="delete_confirm_positive">Yes</string>
+    <string name="delete_confirm_negative">Cancel</string>
 
 </resources>

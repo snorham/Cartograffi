@@ -29,15 +29,15 @@ public class DeleteConfirmationDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final AlertDialog.Builder deleteConfirmation = new AlertDialog.Builder(getActivity());
-        deleteConfirmation.setTitle(R.string.view_detail_delete_confirm_title);
-        deleteConfirmation.setMessage(R.string.view_detail_delete_confirm_message);
-        deleteConfirmation.setPositiveButton(R.string.view_detail_delete_confirm_positive, new OnClickListener() {
+        deleteConfirmation.setTitle(R.string.delete_confirm_title);
+        deleteConfirmation.setMessage(R.string.delete_confirm_message);
+        deleteConfirmation.setPositiveButton(R.string.delete_confirm_positive, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 confirmationInterface.onDialogClick(true);
             }
         });
-        deleteConfirmation.setNegativeButton(R.string.view_detail_delete_confirm_negative, new OnClickListener() {
+        deleteConfirmation.setNegativeButton(R.string.delete_confirm_negative, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 confirmationInterface.onDialogClick(false);
