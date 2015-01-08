@@ -52,7 +52,6 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     public static final String DRAW_ON_KEY = "drawOn";
 
     private float defaultZoom;
-    private CameraPosition cameraPosition;
     private GoogleMap googleMap;
     private LocationManager locationManager;
     private String locationProvider;
@@ -294,9 +293,9 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
             defaultZoom = savedInstanceState.getFloat(CAMERA_ZOOM_KEY, defaultZoom);
             if (defaultZoom == 0) defaultZoom = 15;
 
-            cameraPosition = savedInstanceState.getParcelable(CAMERA_POSITION_KEY);
+            CameraPosition cameraPosition = savedInstanceState.getParcelable(CAMERA_POSITION_KEY);
             CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-            googleMap.moveCamera(cameraUpdate);
+            googleMap.animateCamera(cameraUpdate);
 
         } else {
             defaultZoom = 15;
@@ -398,6 +397,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(defaultZoom);
         googleMap.animateCamera(zoom);
+
     }
 
     public void toggleMapUi() {
