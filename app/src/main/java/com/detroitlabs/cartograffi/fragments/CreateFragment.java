@@ -3,6 +3,7 @@ package com.detroitlabs.cartograffi.fragments;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Criteria;
@@ -415,6 +416,10 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
             }
         });
         deleteDialog.show(getFragmentManager(), "DeleteDialog");
+    }
+
+    public void displayLoadingWheelProgressDialog(){
+        ProgressDialog progressDialog = new ProgressDialog(getActivity());
     }
 
     @Override
