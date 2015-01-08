@@ -2,6 +2,7 @@ package com.detroitlabs.cartograffi.fragments;
 
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -115,7 +116,12 @@ public class ViewSavedDetailFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    public void deleteConfirmDialog(){
+    public void deleteConfirmationDialog(){
+        AlertDialog.Builder deleteConfirmation = new AlertDialog.Builder(getActivity());
+        deleteConfirmation.setTitle(R.string.view_detail_delete_confirm);
+        deleteConfirmation.setMessage(R.string.view_detail_delete_confirm);
+        deleteConfirmation.setPositiveButton();
+        deleteConfirmation.setNegativeButton();
 
     }
 }
