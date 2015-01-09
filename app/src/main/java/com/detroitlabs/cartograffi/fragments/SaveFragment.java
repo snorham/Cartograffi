@@ -37,7 +37,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
 
     public static SaveFragment newInstance(Bitmap mapImage) {
         Bundle args = new Bundle();
-        args.putParcelable(CreateFragment.MAP_IMAGE_KEY, mapImage);
+        args.putParcelable(MapDoodleCreationFragment.MAP_IMAGE_KEY, mapImage);
         SaveFragment saveFrag = new SaveFragment();
         saveFrag.setArguments(args);
         return saveFrag;
@@ -89,7 +89,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         setHasOptionsMenu(true);
 
         if (getArguments() != null) {
-            mapImage = getArguments().getParcelable(CreateFragment.MAP_IMAGE_KEY);
+            mapImage = getArguments().getParcelable(MapDoodleCreationFragment.MAP_IMAGE_KEY);
         }
 
         ImageView snapshotImageView = (ImageView) root.findViewById(R.id.save_snapshot_container);

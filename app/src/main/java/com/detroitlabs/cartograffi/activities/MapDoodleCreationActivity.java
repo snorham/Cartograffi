@@ -9,13 +9,13 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.detroitlabs.cartograffi.R;
-import com.detroitlabs.cartograffi.fragments.CreateFragment;
+import com.detroitlabs.cartograffi.fragments.MapDoodleCreationFragment;
 import com.detroitlabs.cartograffi.fragments.SaveFragment;
 
 
 public class MapDoodleCreationActivity extends Activity {
     private Menu menu;
-    CreateFragment createFrag;
+    MapDoodleCreationFragment createFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class MapDoodleCreationActivity extends Activity {
 
         FragmentManager fragMan = getFragmentManager();
         if(savedInstanceState == null){
-            createFrag = new CreateFragment();
+            createFrag = new MapDoodleCreationFragment();
             fragMan.beginTransaction()
                     .add(R.id.container_frame, createFrag)
                     .commit();

@@ -45,7 +45,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CreateFragment extends Fragment implements View.OnClickListener, LocationListener, OnColorClickListener, OnMapReadyCallback {
+public class MapDoodleCreationFragment extends Fragment implements View.OnClickListener, LocationListener, OnColorClickListener, OnMapReadyCallback {
     public static final String MAP_IMAGE_KEY = "MAP_IMAGE_KEY";
     public static final String CAMERA_ZOOM_KEY = "cameraZoom";
     public static final String CAMERA_POSITION_KEY = "cameraPosition";
@@ -71,7 +71,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     private ProgressDialog progressDialog;
 
 
-    public CreateFragment() {
+    public MapDoodleCreationFragment() {
     }
 
     @Override
@@ -421,8 +421,8 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         final DeleteConfirmationDialogFragment deleteDialog = DeleteConfirmationDialogFragment.newInstance(new DeleteConfirmationInterface() {
             @Override
             public void onDialogClick(boolean confirmationClick) {
-                if(confirmationClick){
-                    if (drawOn){
+                if (confirmationClick) {
+                    if (drawOn) {
                         drawToggle.callOnClick();
                         drawToggle.setChecked(false);
                     }
