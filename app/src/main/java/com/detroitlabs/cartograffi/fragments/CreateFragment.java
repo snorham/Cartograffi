@@ -24,7 +24,7 @@ import android.widget.ToggleButton;
 import com.detroitlabs.cartograffi.R;
 import com.detroitlabs.cartograffi.adapters.ColorsRecyclerAdapter;
 import com.detroitlabs.cartograffi.fragments.DeleteConfirmationDialogFragment.DeleteConfirmationInterface;
-import com.detroitlabs.cartograffi.interfaces.ColorClickListener;
+import com.detroitlabs.cartograffi.interfaces.OnColorClickListener;
 import com.detroitlabs.cartograffi.utils.CartograffiUtils;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,7 +45,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CreateFragment extends Fragment implements View.OnClickListener, LocationListener, ColorClickListener, OnMapReadyCallback {
+public class CreateFragment extends Fragment implements View.OnClickListener, LocationListener, OnColorClickListener, OnMapReadyCallback {
     public static final String MAP_IMAGE_KEY = "MAP_IMAGE_KEY";
     public static final String CAMERA_ZOOM_KEY = "cameraZoom";
     public static final String CAMERA_POSITION_KEY = "cameraPosition";
