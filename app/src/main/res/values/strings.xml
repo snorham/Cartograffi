@@ -15,6 +15,7 @@
     <string name="action_save_snapshot">Save Snapshot</string>
     <string name="action_view_snapshots">View Snapshots</string>
     <string name="action_erase_map">Erase Current Map</string>
+    <string name="progress_dialog">One Moment\.\.\.</string>
 
     <!-- SAVE SCREEN -->
     <string name="title_activity_save">Save Snapshot</string>
