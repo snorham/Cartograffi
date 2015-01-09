@@ -29,6 +29,7 @@ import com.detroitlabs.cartograffi.utils.CartograffiUtils;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -136,7 +137,6 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_create, container, false);
-
         loadDrawSettings();
 
         mapView = (MapView)root.findViewById(R.id.mapView);
@@ -176,8 +176,9 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
             ab.setDisplayHomeAsUpEnabled(false);
             ab.setHomeButtonEnabled(false);
         }
-
+        displayLoadingWheelProgressDialog();
         mapView.getMapAsync(this);
+
     }
 
     @Override
@@ -386,13 +387,19 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     }
 
     private void setUpGoogleMap() {
-
         setMapUiEnabled(true);
         initializeLocationManager();
         googleMap.getUiSettings().setAllGesturesEnabled(true);
 
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(defaultZoom);
         googleMap.animateCamera(zoom);
+
+        googleMap.setOnMapLoadedCallback(new OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                dismissLoadingWheelProgressDialog();
+            }
+        });
     }
 
     public void toggleMapUi() {
