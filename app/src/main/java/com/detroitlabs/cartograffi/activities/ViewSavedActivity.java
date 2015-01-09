@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 
 import com.detroitlabs.cartograffi.R;
-import com.detroitlabs.cartograffi.fragments.ViewSavedFragment;
+import com.detroitlabs.cartograffi.fragments.ViewSnapshotsFragment;
 
 public class ViewSavedActivity extends Activity {
 
@@ -20,7 +20,7 @@ public class ViewSavedActivity extends Activity {
         Fragment viewSavedFrag = fragMan.findFragmentById(R.id.container_frame);
 
         if (viewSavedFrag == null) {
-            viewSavedFrag = new ViewSavedFragment();
+            viewSavedFrag = new ViewSnapshotsFragment();
             fragMan.beginTransaction()
                     .add(R.id.container_frame, viewSavedFrag)
                     .commit();

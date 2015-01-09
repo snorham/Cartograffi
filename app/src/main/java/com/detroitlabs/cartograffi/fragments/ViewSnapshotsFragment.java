@@ -26,12 +26,12 @@ import java.util.Collections;
  * A simple {@link Fragment} subclass.
  *
  */
-public class ViewSavedFragment extends Fragment implements AdapterView.OnItemClickListener,OnSnapshotListItemShareListener {
+public class ViewSnapshotsFragment extends Fragment implements AdapterView.OnItemClickListener,OnSnapshotListItemShareListener {
     private SnapshotListAdapter snapshotListAdapter;
     private ListView snapshotListView;
     private ArrayList<ImageButton> shareButtons;
 
-    public ViewSavedFragment() {
+    public ViewSnapshotsFragment() {
         // Required empty public constructor
     }
 
