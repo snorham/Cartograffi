@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.detroitlabs.cartograffi.R;
 import com.detroitlabs.cartograffi.adapters.SnapshotListAdapter;
-import com.detroitlabs.cartograffi.interfaces.SnapshopListItemShareListener;
+import com.detroitlabs.cartograffi.interfaces.OnSnapshotListItemShareListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,12 +26,12 @@ import java.util.Collections;
  * A simple {@link Fragment} subclass.
  *
  */
-public class ViewSavedFragment extends Fragment implements AdapterView.OnItemClickListener,SnapshopListItemShareListener {
+public class ViewSnapshotsFragment extends Fragment implements AdapterView.OnItemClickListener,OnSnapshotListItemShareListener {
     private SnapshotListAdapter snapshotListAdapter;
     private ListView snapshotListView;
     private ArrayList<ImageButton> shareButtons;
 
-    public ViewSavedFragment() {
+    public ViewSnapshotsFragment() {
         // Required empty public constructor
     }
 
@@ -52,7 +52,7 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
         }
 
         ArrayList<File> files = getSavedSnapshotFiles();
-        if(SaveFragment.directory.list().length < 1) {
+        if(SaveMapSnapshotFragment.directory.list().length < 1) {
             Toast.makeText(getActivity(), "No saved files", Toast.LENGTH_SHORT).show();
         }else {
             snapshotListAdapter = new SnapshotListAdapter(this, getActivity(), files);
@@ -83,19 +83,19 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
         File chosenFile = snapshotListAdapter.getItem(position);
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container_frame,ViewSavedDetailFragment.newInstance(chosenFile));
+        fragmentTransaction.replace(R.id.container_frame, ViewSnapshotDetailFragment.newInstance(chosenFile));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
     @Override
-    public void OnShare(ArrayList<ImageButton> disabledShareButtons) {
+    public void OnSnapshotShare(ArrayList<ImageButton> disabledShareButtons) {
         shareButtons = disabledShareButtons;
         snapshotListView.setEnabled(false);
     }
 
     public ArrayList<File> getSavedSnapshotFiles(){
-        File[] filesArray = SaveFragment.directory.listFiles();
+        File[] filesArray = SaveMapSnapshotFragment.directory.listFiles();
         ArrayList<File> filesList = new ArrayList<File>(Arrays.asList(filesArray));
         Collections.reverse(filesList);
         return filesList;

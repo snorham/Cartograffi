@@ -29,21 +29,21 @@ import java.io.IOException;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SaveFragment extends Fragment implements View.OnClickListener {
+public class SaveMapSnapshotFragment extends Fragment implements View.OnClickListener {
     private Bitmap mapImage;
     private EditText filenameEditText;
     public static final File directory =
             new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Cartograffi");
 
-    public static SaveFragment newInstance(Bitmap mapImage) {
+    public static SaveMapSnapshotFragment newInstance(Bitmap mapImage) {
         Bundle args = new Bundle();
-        args.putParcelable(CreateFragment.MAP_IMAGE_KEY, mapImage);
-        SaveFragment saveFrag = new SaveFragment();
+        args.putParcelable(MapDoodleCreationFragment.MAP_IMAGE_KEY, mapImage);
+        SaveMapSnapshotFragment saveFrag = new SaveMapSnapshotFragment();
         saveFrag.setArguments(args);
         return saveFrag;
     }
 
-    public SaveFragment() {
+    public SaveMapSnapshotFragment() {
         // Required empty public constructor
     }
 
@@ -89,7 +89,7 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         setHasOptionsMenu(true);
 
         if (getArguments() != null) {
-            mapImage = getArguments().getParcelable(CreateFragment.MAP_IMAGE_KEY);
+            mapImage = getArguments().getParcelable(MapDoodleCreationFragment.MAP_IMAGE_KEY);
         }
 
         ImageView snapshotImageView = (ImageView) root.findViewById(R.id.save_snapshot_container);
@@ -134,12 +134,12 @@ public class SaveFragment extends Fragment implements View.OnClickListener {
         }
 
         if (validEntry) {
-            saveFile(userEntry + ".jpg");
+            saveSnapshotToFile(userEntry + ".jpg");
         }
 
     }
 
-    public void saveFile(String filename) {
+    public void saveSnapshotToFile(String filename) {
 
         String state = Environment.getExternalStorageState();
         //is says that it's mounted when it isnt...

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.detroitlabs.cartograffi.R;
-import com.detroitlabs.cartograffi.interfaces.ColorClickListener;
+import com.detroitlabs.cartograffi.interfaces.OnColorClickListener;
 
 /**
  * Created by Borham on 12/2/14.
@@ -17,7 +17,7 @@ import com.detroitlabs.cartograffi.interfaces.ColorClickListener;
 public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAdapter.ViewHolder> {
     private int[] colors;
     private boolean[] selectedStates;
-    private ColorClickListener colorClickListener;
+    private OnColorClickListener onColorClickListener;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -33,8 +33,8 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ColorsRecyclerAdapter(ColorClickListener colorClickListener, int[] colors, boolean[] selectedStates) {
-        this.colorClickListener = colorClickListener;
+    public ColorsRecyclerAdapter(OnColorClickListener onColorClickListener, int[] colors, boolean[] selectedStates) {
+        this.onColorClickListener = onColorClickListener;
         this.colors = colors;
         this.selectedStates = selectedStates;
     }
@@ -52,7 +52,7 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
     }
 
 
-    // Replace the contents of a view (invoked by the layout manager)
+    // Replace the contents of a viewHolder (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
         viewHolder.colorButton.setBackgroundColor(colors[i]);
@@ -71,7 +71,7 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
             public void onClick(View v) {
                 setSelectedStatesOnClick(i);
                 notifyDataSetChanged();
-                colorClickListener.onColorClick(i);
+                onColorClickListener.onColorClick(i);
             }
         });
     }

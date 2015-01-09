@@ -24,7 +24,7 @@ import android.widget.ToggleButton;
 import com.detroitlabs.cartograffi.R;
 import com.detroitlabs.cartograffi.adapters.ColorsRecyclerAdapter;
 import com.detroitlabs.cartograffi.fragments.DeleteConfirmationDialogFragment.DeleteConfirmationInterface;
-import com.detroitlabs.cartograffi.interfaces.ColorClickListener;
+import com.detroitlabs.cartograffi.interfaces.OnColorClickListener;
 import com.detroitlabs.cartograffi.utils.CartograffiUtils;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,7 +45,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CreateFragment extends Fragment implements View.OnClickListener, LocationListener, ColorClickListener, OnMapReadyCallback {
+public class MapDoodleCreationFragment extends Fragment implements View.OnClickListener, LocationListener, OnColorClickListener, OnMapReadyCallback {
     public static final String MAP_IMAGE_KEY = "MAP_IMAGE_KEY";
     public static final String CAMERA_ZOOM_KEY = "cameraZoom";
     public static final String CAMERA_POSITION_KEY = "cameraPosition";
@@ -71,7 +71,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
     private ProgressDialog progressDialog;
 
 
-    public CreateFragment() {
+    public MapDoodleCreationFragment() {
     }
 
     @Override
@@ -91,7 +91,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
 
             case R.id.action_share:
                 menu.setGroupEnabled(0, false);
-                SaveFragment.directory.mkdirs();
+                SaveMapSnapshotFragment.directory.mkdirs();
                 snapshotReadyCallback = new GoogleMap.SnapshotReadyCallback() {
                     @Override
                     public void onSnapshotReady(Bitmap bitmap) {
@@ -104,7 +104,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
             case R.id.action_save_snapshot:
                 menu.setGroupEnabled(0, false);
                 displayLoadingWheelProgressDialog();
-                SaveFragment.directory.mkdirs();
+                SaveMapSnapshotFragment.directory.mkdirs();
                 snapshotReadyCallback = new GoogleMap.SnapshotReadyCallback() {
                     @Override
                     public void onSnapshotReady(Bitmap bitmap) {
@@ -373,7 +373,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         dismissLoadingWheelProgressDialog();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-        fragmentTransaction.replace(R.id.container_frame, SaveFragment.newInstance(bitmap));
+        fragmentTransaction.replace(R.id.container_frame, SaveMapSnapshotFragment.newInstance(bitmap));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -421,8 +421,8 @@ public class CreateFragment extends Fragment implements View.OnClickListener, Lo
         final DeleteConfirmationDialogFragment deleteDialog = DeleteConfirmationDialogFragment.newInstance(new DeleteConfirmationInterface() {
             @Override
             public void onDialogClick(boolean confirmationClick) {
-                if(confirmationClick){
-                    if (drawOn){
+                if (confirmationClick) {
+                    if (drawOn) {
                         drawToggle.callOnClick();
                         drawToggle.setChecked(false);
                     }

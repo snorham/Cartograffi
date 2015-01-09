@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.detroitlabs.cartograffi.R;
-import com.detroitlabs.cartograffi.interfaces.SnapshopListItemShareListener;
+import com.detroitlabs.cartograffi.interfaces.OnSnapshotListItemShareListener;
 import com.detroitlabs.cartograffi.utils.CartograffiUtils;
 
 import java.io.File;
@@ -22,10 +22,10 @@ import java.util.ArrayList;
  */
 public class SnapshotListAdapter extends ArrayAdapter<File> {
     private Context context;
-    private SnapshopListItemShareListener shareListener;
+    private OnSnapshotListItemShareListener shareListener;
     private ArrayList<ImageButton> shareButtons = new ArrayList<ImageButton>();
 
-    public SnapshotListAdapter(SnapshopListItemShareListener shareListener, Context context, ArrayList<File> files) {
+    public SnapshotListAdapter(OnSnapshotListItemShareListener shareListener, Context context, ArrayList<File> files) {
         super(context, R.layout.row_item_snapshot, files);
         this.shareListener = shareListener;
         this.context = context;
@@ -57,7 +57,7 @@ public class SnapshotListAdapter extends ArrayAdapter<File> {
                 for (ImageButton shareButton: shareButtons){
                     shareButton.setEnabled(false);
                 }
-                shareListener.OnShare(shareButtons);
+                shareListener.OnSnapshotShare(shareButtons);
                 CartograffiUtils.shareImageFile(context, mapFile);
             }
         });
