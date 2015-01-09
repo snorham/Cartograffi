@@ -83,7 +83,7 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
         File chosenFile = snapshotListAdapter.getItem(position);
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container_frame,ViewSavedDetailFragment.newInstance(chosenFile));
+        fragmentTransaction.replace(R.id.container_frame, ViewSnapshotDetailFragment.newInstance(chosenFile));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

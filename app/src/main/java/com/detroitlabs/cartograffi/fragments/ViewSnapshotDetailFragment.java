@@ -25,22 +25,22 @@ import java.text.SimpleDateFormat;
  * A simple {@link Fragment} subclass.
  *
  */
-public class ViewSavedDetailFragment extends Fragment implements View.OnClickListener {
+public class ViewSnapshotDetailFragment extends Fragment implements View.OnClickListener {
     public static final String MAP_FILE_KEY = "mapFile";
     private File mapFile;
     private Menu menu;
     private Button deleteButton;
 
     //FOR LATER
-    public static ViewSavedDetailFragment newInstance(File mapFile){
+    public static ViewSnapshotDetailFragment newInstance(File mapFile){
         Bundle args = new Bundle();
         args.putSerializable(MAP_FILE_KEY, mapFile);
-        ViewSavedDetailFragment viewDetailFrag = new ViewSavedDetailFragment();
+        ViewSnapshotDetailFragment viewDetailFrag = new ViewSnapshotDetailFragment();
         viewDetailFrag.setArguments(args);
         return viewDetailFrag;
     }
 
-    public ViewSavedDetailFragment() {
+    public ViewSnapshotDetailFragment() {
         // Required empty public constructor
     }
 
