@@ -52,7 +52,7 @@ public class ColorsRecyclerAdapter extends RecyclerView.Adapter<ColorsRecyclerAd
     }
 
 
-    // Replace the contents of a view (invoked by the layout manager)
+    // Replace the contents of a viewHolder (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
         viewHolder.colorButton.setBackgroundColor(colors[i]);
