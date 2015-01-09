@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -187,6 +188,7 @@ public class MapDoodleCreationFragment extends Fragment implements View.OnClickL
     public void onPause() {
         super.onPause();
         mapView.onPause();
+        dismissLoadingWheelProgressDialog();
 
         saveSettingsToBundle();
     }
@@ -394,16 +396,15 @@ public class MapDoodleCreationFragment extends Fragment implements View.OnClickL
     }
 
     private void setUpGoogleMap() {
-        setMapUiEnabled(true);
         initializeLocationManager();
-        googleMap.getUiSettings().setAllGesturesEnabled(true);
-
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(defaultZoom);
-        googleMap.animateCamera(zoom);
 
         googleMap.setOnMapLoadedCallback(new OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
+                setMapUiEnabled(true);
+                CameraUpdate zoom = CameraUpdateFactory.zoomTo(defaultZoom);
+                googleMap.animateCamera(zoom);
+                googleMap.getUiSettings().setAllGesturesEnabled(true);
                 dismissLoadingWheelProgressDialog();
             }
         });
