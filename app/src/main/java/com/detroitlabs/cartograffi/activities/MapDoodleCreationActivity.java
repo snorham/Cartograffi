@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.detroitlabs.cartograffi.R;
 import com.detroitlabs.cartograffi.fragments.MapDoodleCreationFragment;
-import com.detroitlabs.cartograffi.fragments.SaveFragment;
+import com.detroitlabs.cartograffi.fragments.SaveMapSnapshotFragment;
 
 
 public class MapDoodleCreationActivity extends Activity {
@@ -46,14 +46,14 @@ public class MapDoodleCreationActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.action_view_snapshots:
                 menu.setGroupEnabled(0,false);
-                SaveFragment.directory.mkdirs();
+                SaveMapSnapshotFragment.directory.mkdirs();
                 return viewSnapshotsSelected();
         }
         return super.onOptionsItemSelected(item);
     }
 
     public boolean viewSnapshotsSelected(){
-        if(SaveFragment.directory.list().length < 1){
+        if(SaveMapSnapshotFragment.directory.list().length < 1){
             Toast.makeText(this, "No saved files", Toast.LENGTH_SHORT).show();
             menu.setGroupEnabled(0, true);
             return false;

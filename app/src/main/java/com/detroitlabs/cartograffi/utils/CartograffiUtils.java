@@ -9,7 +9,7 @@ import android.os.Environment;
 import android.widget.Toast;
 
 import com.detroitlabs.cartograffi.R;
-import com.detroitlabs.cartograffi.fragments.SaveFragment;
+import com.detroitlabs.cartograffi.fragments.SaveMapSnapshotFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +20,7 @@ import java.io.IOException;
  * Created by Borham on 12/8/14.
  */
 public class CartograffiUtils {
-    public static final File tempSharedFile = new File(SaveFragment.directory, "temp_shared_file.jpg");
+    public static final File tempSharedFile = new File(SaveMapSnapshotFragment.directory, "temp_shared_file.jpg");
 
     private CartograffiUtils(){}
 

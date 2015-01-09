@@ -52,7 +52,7 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
         }
 
         ArrayList<File> files = getSavedSnapshotFiles();
-        if(SaveFragment.directory.list().length < 1) {
+        if(SaveMapSnapshotFragment.directory.list().length < 1) {
             Toast.makeText(getActivity(), "No saved files", Toast.LENGTH_SHORT).show();
         }else {
             snapshotListAdapter = new SnapshotListAdapter(this, getActivity(), files);
@@ -95,7 +95,7 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     public ArrayList<File> getSavedSnapshotFiles(){
-        File[] filesArray = SaveFragment.directory.listFiles();
+        File[] filesArray = SaveMapSnapshotFragment.directory.listFiles();
         ArrayList<File> filesList = new ArrayList<File>(Arrays.asList(filesArray));
         Collections.reverse(filesList);
         return filesList;

@@ -91,7 +91,7 @@ public class MapDoodleCreationFragment extends Fragment implements View.OnClickL
 
             case R.id.action_share:
                 menu.setGroupEnabled(0, false);
-                SaveFragment.directory.mkdirs();
+                SaveMapSnapshotFragment.directory.mkdirs();
                 snapshotReadyCallback = new GoogleMap.SnapshotReadyCallback() {
                     @Override
                     public void onSnapshotReady(Bitmap bitmap) {
@@ -104,7 +104,7 @@ public class MapDoodleCreationFragment extends Fragment implements View.OnClickL
             case R.id.action_save_snapshot:
                 menu.setGroupEnabled(0, false);
                 displayLoadingWheelProgressDialog();
-                SaveFragment.directory.mkdirs();
+                SaveMapSnapshotFragment.directory.mkdirs();
                 snapshotReadyCallback = new GoogleMap.SnapshotReadyCallback() {
                     @Override
                     public void onSnapshotReady(Bitmap bitmap) {
@@ -373,7 +373,7 @@ public class MapDoodleCreationFragment extends Fragment implements View.OnClickL
         dismissLoadingWheelProgressDialog();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-        fragmentTransaction.replace(R.id.container_frame, SaveFragment.newInstance(bitmap));
+        fragmentTransaction.replace(R.id.container_frame, SaveMapSnapshotFragment.newInstance(bitmap));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

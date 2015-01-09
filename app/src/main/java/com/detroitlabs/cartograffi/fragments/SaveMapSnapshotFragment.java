@@ -29,21 +29,21 @@ import java.io.IOException;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SaveFragment extends Fragment implements View.OnClickListener {
+public class SaveMapSnapshotFragment extends Fragment implements View.OnClickListener {
     private Bitmap mapImage;
     private EditText filenameEditText;
     public static final File directory =
             new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Cartograffi");
 
-    public static SaveFragment newInstance(Bitmap mapImage) {
+    public static SaveMapSnapshotFragment newInstance(Bitmap mapImage) {
         Bundle args = new Bundle();
         args.putParcelable(MapDoodleCreationFragment.MAP_IMAGE_KEY, mapImage);
-        SaveFragment saveFrag = new SaveFragment();
+        SaveMapSnapshotFragment saveFrag = new SaveMapSnapshotFragment();
         saveFrag.setArguments(args);
         return saveFrag;
     }
 
-    public SaveFragment() {
+    public SaveMapSnapshotFragment() {
         // Required empty public constructor
     }
 
