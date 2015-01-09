@@ -13,7 +13,7 @@ import com.detroitlabs.cartograffi.fragments.CreateFragment;
 import com.detroitlabs.cartograffi.fragments.SaveFragment;
 
 
-public class CreateActivity extends Activity {
+public class MapDoodleCreationActivity extends Activity {
     private Menu menu;
     CreateFragment createFrag;
 

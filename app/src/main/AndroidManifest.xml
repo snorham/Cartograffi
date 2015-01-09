@@ -32,7 +32,7 @@
             android:value="AIzaSyCvHjzseHFG5oM3YyirD9orR1ey4Lf-3nc" />
 
         <activity
-            android:name=".activities.CreateActivity"
+            android:name=".activities.MapDoodleCreationActivity"
             android:label="@string/title_activity_create"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
@@ -46,11 +46,11 @@
         <activity
             android:name=".activities.ViewSavedActivity"
             android:label="@string/title_activity_view_saved"
-            android:parentActivityName=".activities.CreateActivity"
+            android:parentActivityName=".activities.MapDoodleCreationActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.detroitlabs.cartograffi.activities.CreateActivity" />
+                android:value=".activities.MapDoodleCreationActivity" />
         </activity>
     </application>
 
