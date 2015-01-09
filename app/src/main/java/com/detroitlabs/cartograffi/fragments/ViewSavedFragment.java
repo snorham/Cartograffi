@@ -89,7 +89,7 @@ public class ViewSavedFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     @Override
-    public void OnShare(ArrayList<ImageButton> disabledShareButtons) {
+    public void OnSnapshotShare(ArrayList<ImageButton> disabledShareButtons) {
         shareButtons = disabledShareButtons;
         snapshotListView.setEnabled(false);
     }

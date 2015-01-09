@@ -57,7 +57,7 @@ public class SnapshotListAdapter extends ArrayAdapter<File> {
                 for (ImageButton shareButton: shareButtons){
                     shareButton.setEnabled(false);
                 }
-                shareListener.OnShare(shareButtons);
+                shareListener.OnSnapshotShare(shareButtons);
                 CartograffiUtils.shareImageFile(context, mapFile);
             }
         });

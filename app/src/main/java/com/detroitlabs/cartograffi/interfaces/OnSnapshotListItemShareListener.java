@@ -8,5 +8,5 @@ import java.util.ArrayList;
  * Created by Borham on 12/16/14.
  */
 public interface OnSnapshotListItemShareListener {
-    public void OnShare(ArrayList<ImageButton> disabledShareButtons);
+    public void OnSnapshotShare(ArrayList<ImageButton> disabledShareButtons);
 }
