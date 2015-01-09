@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.detroitlabs.cartograffi.R;
 import com.detroitlabs.cartograffi.adapters.SnapshotListAdapter;
-import com.detroitlabs.cartograffi.interfaces.SnapshopListItemShareListener;
+import com.detroitlabs.cartograffi.interfaces.OnSnapshotListItemShareListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.Collections;
  * A simple {@link Fragment} subclass.
  *
  */
-public class ViewSavedFragment extends Fragment implements AdapterView.OnItemClickListener,SnapshopListItemShareListener {
+public class ViewSavedFragment extends Fragment implements AdapterView.OnItemClickListener,OnSnapshotListItemShareListener {
     private SnapshotListAdapter snapshotListAdapter;
     private ListView snapshotListView;
     private ArrayList<ImageButton> shareButtons;
