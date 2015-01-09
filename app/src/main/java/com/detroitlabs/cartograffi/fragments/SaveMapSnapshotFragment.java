@@ -134,12 +134,12 @@ public class SaveMapSnapshotFragment extends Fragment implements View.OnClickLis
         }
 
         if (validEntry) {
-            saveFile(userEntry + ".jpg");
+            saveSnapshotToFile(userEntry + ".jpg");
         }
 
     }
 
-    public void saveFile(String filename) {
+    public void saveSnapshotToFile(String filename) {
 
         String state = Environment.getExternalStorageState();
         //is says that it's mounted when it isnt...
